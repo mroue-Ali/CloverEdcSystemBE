@@ -1,0 +1,56 @@
+public interface I{{ModelName}}Repository : IBaseRepository<{{ModelName}}>
+{
+Task<{{ModelName}}> GetByIdAsync(Guid id);
+Task<IEnumerable<{{ModelName}}>> GetAllAsync();
+Task<{{ModelName}}> CreateAsync({{ModelName}}Dto {{ModelNameLower}});
+Task<{{ModelName}}> UpdateAsync({{ModelName}} {{ModelNameLower}});
+Task<bool> DeleteAsync(Guid id);
+    }
+
+    public class {{ModelName}}Repository : BaseRepository<{{ModelName}}>, I{{ModelName}}Repository
+    {
+    private readonly ApplicationDbContext _context;
+
+    public {{ModelName}}Repository(ApplicationDbContext context) : base(context)
+    {
+    _context = context;
+    }
+
+    public async Task<{{ModelName}}> GetByIdAsync(Guid id)
+    {
+    return await _context.{{Pluralize ModelName}}.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<{{ModelName}}>> GetAllAsync()
+    {
+    return await _context.{{Pluralize ModelName}}.ToListAsync();
+    }
+
+    public async Task<{{ModelName}}> CreateAsync({{ModelName}}Dto {{ModelNameLower}})
+    {
+    var new{{ModelName}} = new {{ModelName}}
+    {
+    // Property mapping
+    };
+    _context.{{Pluralize ModelName}}.Add(new{{ModelName}});
+    await _context.SaveChangesAsync();
+    return new{{ModelName}};
+    }
+
+    public async Task<{{ModelName}}> UpdateAsync({{ModelName}} {{ModelNameLower}})
+    {
+    _context.{{Pluralize ModelName}}.Update({{ModelNameLower}});
+    await _context.SaveChangesAsync();
+    return {{ModelNameLower}};
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+        {
+        var {{ModelNameLower}} = await GetByIdAsync(id);
+        if ({{ModelNameLower}} == null) return false;
+
+        _context.{{Pluralize ModelName}}.Remove({{ModelNameLower}});
+        await _context.SaveChangesAsync();
+        return true;
+        }
+        }

@@ -1,0 +1,17 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace CloverEdc.Core.Models;
+
+public class Dm : EntityBase
+{
+    public Guid UserId { get; set; }
+    public User User { get; set; }
+
+    [JsonIgnore]
+    [NotMapped]
+    public ICollection<DmSite> DmSites { get; set; }
+    [JsonIgnore]
+    [NotMapped]
+    public ICollection<Query> Queries { get; set; }
+}
