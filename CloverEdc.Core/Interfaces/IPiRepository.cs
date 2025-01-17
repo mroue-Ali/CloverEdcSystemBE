@@ -11,4 +11,6 @@ public interface IPiRepository : IBaseRepository<Pi>
     Task<Pi> UpdateAsync(Pi item);
     Task<bool> DeleteAsync(Guid id);
     Task<IEnumerable<Pi>> GetPisByStudyIdAsync(Guid studyId);
+    Task<(IEnumerable<Pi>, int)> GetPisByStudyIdAsync(Guid studyId,Filter filter);
+
 }

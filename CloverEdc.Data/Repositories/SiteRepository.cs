@@ -14,15 +14,37 @@ public class SiteRepository : BaseRepository<Site>, ISiteRepository
     {
         _context = context;
     }
-    
+
     public async Task<Site> GetByIdAsync(Guid id)
     {
         return await _context.Sites.FindAsync(id);
     }
+
     public async Task<IEnumerable<Site>> GetAllAsync()
     {
-        return await _context.Sites.Include(x=>x.Study).ToListAsync();
+        return await _context.Sites.Include(x => x.Study).ToListAsync();
     }
+
+    public async Task<(IEnumerable<Site>, int)> GetPagedFilteredItemsAsync(Filter filter)
+    {
+        var query = _context.Sites.Include(x => x.Study).AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query.Where(r =>
+                r.Name.Contains(keyword)
+            );
+        }
+
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
+            .ToListAsync();
+
+        return (items, totalItems);
+    }
+
     public async Task<Site> CreateAsync(SiteDto site)
     {
         var newSite = new Site
@@ -52,34 +74,48 @@ public class SiteRepository : BaseRepository<Site>, ISiteRepository
         await _context.SaveChangesAsync();
         return true;
     }
-    
-    public async Task<IEnumerable<Site>> GetSitesByStudyIdAsync(Guid studyId)
+
+    public async Task<(IEnumerable<Site>, int)> GetSitesByStudyIdAsync(Guid studyId, Filter filter)
     {
-        var sites = await _context.Sites
-            .Where(x => x.StudyId == studyId)
+        var query = _context.Sites.Where(x => x.StudyId == studyId).Include(x => x.Study).AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query.Where(r =>
+                r.Name.Contains(keyword)
+            );
+        }
+
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
             .ToListAsync();
-       var sitesDto = sites.Select(x => new Site
+        var sitesDto = items.Select(x => new Site
         {
             Id = x.Id,
             Name = x.Name,
             Location = x.Location,
             StudyId = x.StudyId,
-            hasPi = _context.PiSites.Any(p => p.SiteId == x.Id)
+            hasPi = x.PiId != null ? true : false
         });
-        return sitesDto;
+        return (sitesDto, totalItems);
     }
-    
+
     public async Task<Pi> AddPrincipalInvestigatorToSiteAsync(Guid siteId, User user)
     {
         _context.Users.Add(user);
         var pi = new Pi
         {
             UserId = user.Id,
-            User =  user
+            User = user
         };
         _context.Pis.Add(pi);
+        var site = await GetByIdAsync(siteId);
+        site.PiId = pi.Id;
+        _context.Sites.Update(site);
+
         await _context.SaveChangesAsync();
         return pi;
     }
-    
 }

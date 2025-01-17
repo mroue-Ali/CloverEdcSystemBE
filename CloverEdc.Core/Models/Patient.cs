@@ -8,13 +8,10 @@ public class Patient : EntityBase
     public string Name { get; set; }
     public string Code { get; set; }
 
-    public Guid StudyId { get; set; }
-    public Study Study { get; set; }
-
     public Guid SiteId { get; set; }
     public Site Site { get; set; }
 
-    public string RandomizationArm { get; set; } // Nullable
+    public string? RandomizationArm { get; set; } // Nullable
     [JsonIgnore]
     [NotMapped]
     public ICollection<Crf> Crfs { get; set; }

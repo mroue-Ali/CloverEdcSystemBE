@@ -31,7 +31,6 @@ public class PatientRepository : BaseRepository<Patient>, IPatientRepository
         {
             Name = patient.Name,
             Code = patient.Code,
-            StudyId = patient.StudyId,
             SiteId = patient.SiteId,
             RandomizationArm = patient.RandomizationArm,
         };

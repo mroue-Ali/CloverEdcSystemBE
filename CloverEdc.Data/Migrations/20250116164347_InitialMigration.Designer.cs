@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloverEdc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119200511_SecDbStr")]
-    partial class SecDbStr
+    [Migration("20250116164347_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsTreated")
                         .HasColumnType("bit");
@@ -83,6 +86,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
@@ -94,6 +100,38 @@ namespace CloverEdc.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AuditTrails");
+                });
+
+            modelBuilder.Entity("CloverEdc.Core.Models.BaseField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("BaseFields");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crc", b =>
@@ -111,6 +149,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -121,13 +162,12 @@ namespace CloverEdc.Data.Migrations
                     b.ToTable("Crcs");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.CrcSite", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.CrcCrf", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("CrcId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CrcId")
+                    b.Property<Guid>("CrfId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -139,22 +179,26 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("SiteId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("CrcId");
+                    b.HasKey("CrcId", "CrfId");
 
-                    b.HasIndex("SiteId");
+                    b.HasIndex("CrfId");
 
-                    b.ToTable("CrcSites");
+                    b.ToTable("CrcCrfs");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crf", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CrcId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CrfTemplateId")
@@ -169,19 +213,19 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("StudyId")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CrcId");
+
                     b.HasIndex("CrfTemplateId");
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("StudyId");
 
                     b.ToTable("Crfs");
                 });
@@ -192,7 +236,10 @@ namespace CloverEdc.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CrfPageId")
+                    b.Property<Guid>("BaseFieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CrfFileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -208,14 +255,16 @@ namespace CloverEdc.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FieldType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRequired")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("RequiredFieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RequiredOptionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ValidationRules")
@@ -224,7 +273,9 @@ namespace CloverEdc.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CrfPageId");
+                    b.HasIndex("BaseFieldId");
+
+                    b.HasIndex("CrfFileId");
 
                     b.ToTable("CrfFields");
                 });
@@ -247,9 +298,15 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentFileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("RequiredFileId")
                         .HasColumnType("uniqueidentifier");
@@ -259,38 +316,6 @@ namespace CloverEdc.Data.Migrations
                     b.HasIndex("CrfTemplateId");
 
                     b.ToTable("CrfFiles");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfPage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CrfFileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("DateCreated")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("DateDeleted")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("DateUpdated")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("RequiredPageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CrfFileId");
-
-                    b.ToTable("CrfPages");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.CrfTemplate", b =>
@@ -311,6 +336,9 @@ namespace CloverEdc.Data.Migrations
 
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -335,9 +363,6 @@ namespace CloverEdc.Data.Migrations
                     b.Property<Guid>("CrfFieldId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CrfId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
 
@@ -346,6 +371,15 @@ namespace CloverEdc.Data.Migrations
 
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DropDownValueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsModified")
                         .HasColumnType("bit");
@@ -362,7 +396,9 @@ namespace CloverEdc.Data.Migrations
 
                     b.HasIndex("CrfFieldId");
 
-                    b.HasIndex("CrfId");
+                    b.HasIndex("DropDownValueId");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("CrfValues");
                 });
@@ -382,6 +418,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -392,10 +431,12 @@ namespace CloverEdc.Data.Migrations
                     b.ToTable("Dms");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.DmSite", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.DmQuery", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("DmId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QueryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -407,19 +448,83 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("DmId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SiteId")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("DmId", "QueryId");
+
+                    b.HasIndex("QueryId");
+
+                    b.ToTable("DmQueries");
+                });
+
+            modelBuilder.Entity("CloverEdc.Core.Models.DropDownOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BaseFieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DmId");
+                    b.ToTable("DropDownOptions");
+                });
 
-                    b.HasIndex("SiteId");
+            modelBuilder.Entity("CloverEdc.Core.Models.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.ToTable("DmSites");
+                    b.Property<Guid>("CrfFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CrfId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("DateDone")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTimeOffset?>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CrfFileId");
+
+                    b.HasIndex("CrfId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Lock", b =>
@@ -436,6 +541,9 @@ namespace CloverEdc.Data.Migrations
 
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("LockedBy")
                         .HasColumnType("uniqueidentifier");
@@ -477,25 +585,22 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RandomizationArm")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("StudyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SiteId");
-
-                    b.HasIndex("StudyId");
 
                     b.ToTable("Patients");
                 });
@@ -515,15 +620,13 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("SiteId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SiteId");
 
                     b.HasIndex("UserId");
 
@@ -544,6 +647,9 @@ namespace CloverEdc.Data.Migrations
 
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -581,6 +687,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<Guid>("DmId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("QueryText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -613,6 +722,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -626,12 +738,14 @@ namespace CloverEdc.Data.Migrations
                         {
                             Id = new Guid("f45a7e79-845f-47df-af36-dc486e563772"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
                             Name = "SuperAdmin"
                         });
                 });
@@ -651,6 +765,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -659,10 +776,15 @@ namespace CloverEdc.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("PiId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("StudyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PiId");
 
                     b.HasIndex("StudyId");
 
@@ -684,6 +806,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -702,13 +827,41 @@ namespace CloverEdc.Data.Migrations
                     b.ToTable("Studies");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.UpdateRequest", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.Type", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CrcId")
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
+                });
+
+            modelBuilder.Entity("CloverEdc.Core.Models.UpdateRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CrfValueId")
@@ -723,6 +876,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<DateTimeOffset?>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NewValue")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -736,8 +892,6 @@ namespace CloverEdc.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CrcId");
 
                     b.HasIndex("CrfValueId");
 
@@ -763,6 +917,17 @@ namespace CloverEdc.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -773,6 +938,9 @@ namespace CloverEdc.Data.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("StudyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -781,26 +949,21 @@ namespace CloverEdc.Data.Migrations
 
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("StudyId");
+
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("98556a3d-8b9d-45cc-ba41-4292dea6b3d2"),
-                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Email = "admin@example.com",
-                            Password = "AQAAAAIAAYagAAAAEJdNTHPhGzzb4oz2hS33oP63ZEMBmi32cLbFQL1GZ+cJZWMUCHA7VrIqLrNbIf5VWA==",
-                            RefreshToken = new Guid("e2640f85-77bf-4e0e-8a69-6354e38df585"),
-                            RoleId = new Guid("f45a7e79-845f-47df-af36-dc486e563772"),
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("fe601199-a622-43dd-ade8-ed18a6d1aae7"),
+                            Id = new Guid("dcd232f6-4733-4659-b267-fe665b52b1a4"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "superAdmin@example.com",
-                            Password = "AQAAAAIAAYagAAAAEJdNTHPhGzzb4oz2hS33oP63ZEMBmi32cLbFQL1GZ+cJZWMUCHA7VrIqLrNbIf5VWA==",
-                            RefreshToken = new Guid("6eadd13b-0074-4f98-a1d6-19a2ce5f1333"),
+                            FirstName = "Super",
+                            IsDeleted = false,
+                            LastName = "Admin",
+                            Password = "AQAAAAIAAYagAAAAEMDkgFp1n0ag3dUpyVTudD4lNoWeqNIK5qSfFLFYsffTsc+Eo7uaGyNOwPfHLOjUDQ==",
+                            RefreshToken = new Guid("59db4b9f-845e-4d0f-89b4-c9cec6398ae7"),
                             RoleId = new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"),
                             UserName = "superAdmin"
                         });
@@ -828,6 +991,17 @@ namespace CloverEdc.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CloverEdc.Core.Models.BaseField", b =>
+                {
+                    b.HasOne("CloverEdc.Core.Models.Type", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("CloverEdc.Core.Models.Crc", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.User", "User")
@@ -839,83 +1013,80 @@ namespace CloverEdc.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.CrcSite", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.CrcCrf", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.Crc", "Crc")
-                        .WithMany("CrcSites")
+                        .WithMany("CrcCrfs")
                         .HasForeignKey("CrcId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloverEdc.Core.Models.Site", "Site")
-                        .WithMany("CrcSites")
-                        .HasForeignKey("SiteId")
+                    b.HasOne("CloverEdc.Core.Models.Crf", "Crf")
+                        .WithMany("CrcCrfs")
+                        .HasForeignKey("CrfId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Crc");
 
-                    b.Navigation("Site");
+                    b.Navigation("Crf");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crf", b =>
                 {
+                    b.HasOne("CloverEdc.Core.Models.Crc", "Crc")
+                        .WithMany()
+                        .HasForeignKey("CrcId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CloverEdc.Core.Models.CrfTemplate", "CrfTemplate")
-                        .WithMany("Crfs")
+                        .WithMany()
                         .HasForeignKey("CrfTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CloverEdc.Core.Models.Patient", "Patient")
-                        .WithMany("Crfs")
+                        .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloverEdc.Core.Models.Study", "Study")
-                        .WithMany()
-                        .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Crc");
 
                     b.Navigation("CrfTemplate");
 
                     b.Navigation("Patient");
-
-                    b.Navigation("Study");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.CrfField", b =>
                 {
-                    b.HasOne("CloverEdc.Core.Models.CrfPage", "CrfPage")
-                        .WithMany("CrfFields")
-                        .HasForeignKey("CrfPageId")
+                    b.HasOne("CloverEdc.Core.Models.BaseField", "BaseField")
+                        .WithMany()
+                        .HasForeignKey("BaseFieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CrfPage");
+                    b.HasOne("CloverEdc.Core.Models.CrfFile", "CrfFile")
+                        .WithMany()
+                        .HasForeignKey("CrfFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BaseField");
+
+                    b.Navigation("CrfFile");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.CrfFile", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.CrfTemplate", "CrfTemplate")
-                        .WithMany("CrfFiles")
+                        .WithMany()
                         .HasForeignKey("CrfTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CrfTemplate");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfPage", b =>
-                {
-                    b.HasOne("CloverEdc.Core.Models.CrfFile", "CrfFile")
-                        .WithMany("CrfPages")
-                        .HasForeignKey("CrfFileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CrfFile");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.CrfTemplate", b =>
@@ -937,15 +1108,21 @@ namespace CloverEdc.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloverEdc.Core.Models.Crf", "Crf")
-                        .WithMany("CrfValues")
-                        .HasForeignKey("CrfId")
+                    b.HasOne("CloverEdc.Core.Models.DropDownOption", "DropDownValue")
+                        .WithMany()
+                        .HasForeignKey("DropDownValueId");
+
+                    b.HasOne("CloverEdc.Core.Models.File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Crf");
-
                     b.Navigation("CrfField");
+
+                    b.Navigation("DropDownValue");
+
+                    b.Navigation("File");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Dm", b =>
@@ -959,23 +1136,42 @@ namespace CloverEdc.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.DmSite", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.DmQuery", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.Dm", "Dm")
-                        .WithMany("DmSites")
+                        .WithMany("DmQueries")
                         .HasForeignKey("DmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloverEdc.Core.Models.Site", "Site")
-                        .WithMany("DmSites")
-                        .HasForeignKey("SiteId")
+                    b.HasOne("CloverEdc.Core.Models.Query", "Query")
+                        .WithMany("DmQueries")
+                        .HasForeignKey("QueryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Dm");
 
-                    b.Navigation("Site");
+                    b.Navigation("Query");
+                });
+
+            modelBuilder.Entity("CloverEdc.Core.Models.File", b =>
+                {
+                    b.HasOne("CloverEdc.Core.Models.CrfFile", "CrfFile")
+                        .WithMany()
+                        .HasForeignKey("CrfFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloverEdc.Core.Models.Crf", "Crf")
+                        .WithMany()
+                        .HasForeignKey("CrfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crf");
+
+                    b.Navigation("CrfFile");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Lock", b =>
@@ -1005,32 +1201,16 @@ namespace CloverEdc.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloverEdc.Core.Models.Study", "Study")
-                        .WithMany("Patients")
-                        .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Site");
-
-                    b.Navigation("Study");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Pi", b =>
                 {
-                    b.HasOne("CloverEdc.Core.Models.Site", "Site")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CloverEdc.Core.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Site");
 
                     b.Navigation("User");
                 });
@@ -1044,7 +1224,7 @@ namespace CloverEdc.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("CloverEdc.Core.Models.Dm", "Dm")
-                        .WithMany("Queries")
+                        .WithMany()
                         .HasForeignKey("DmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1056,11 +1236,17 @@ namespace CloverEdc.Data.Migrations
 
             modelBuilder.Entity("CloverEdc.Core.Models.Site", b =>
                 {
+                    b.HasOne("CloverEdc.Core.Models.Pi", "Pi")
+                        .WithMany()
+                        .HasForeignKey("PiId");
+
                     b.HasOne("CloverEdc.Core.Models.Study", "Study")
-                        .WithMany("Sites")
+                        .WithMany()
                         .HasForeignKey("StudyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Pi");
 
                     b.Navigation("Study");
                 });
@@ -1068,7 +1254,7 @@ namespace CloverEdc.Data.Migrations
             modelBuilder.Entity("CloverEdc.Core.Models.Study", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.Protocol", "Protocol")
-                        .WithMany("Studies")
+                        .WithMany()
                         .HasForeignKey("ProtocolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1078,19 +1264,11 @@ namespace CloverEdc.Data.Migrations
 
             modelBuilder.Entity("CloverEdc.Core.Models.UpdateRequest", b =>
                 {
-                    b.HasOne("CloverEdc.Core.Models.Crc", "Crc")
-                        .WithMany()
-                        .HasForeignKey("CrcId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CloverEdc.Core.Models.CrfValue", "CrfValue")
-                        .WithMany("UpdateRequests")
+                        .WithMany()
                         .HasForeignKey("CrfValueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Crc");
 
                     b.Navigation("CrfValue");
                 });
@@ -1103,70 +1281,33 @@ namespace CloverEdc.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CloverEdc.Core.Models.Study", "Study")
+                        .WithMany()
+                        .HasForeignKey("StudyId");
+
                     b.Navigation("Role");
+
+                    b.Navigation("Study");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crc", b =>
                 {
-                    b.Navigation("CrcSites");
+                    b.Navigation("CrcCrfs");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crf", b =>
                 {
-                    b.Navigation("CrfValues");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfFile", b =>
-                {
-                    b.Navigation("CrfPages");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfPage", b =>
-                {
-                    b.Navigation("CrfFields");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfTemplate", b =>
-                {
-                    b.Navigation("CrfFiles");
-
-                    b.Navigation("Crfs");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.CrfValue", b =>
-                {
-                    b.Navigation("UpdateRequests");
+                    b.Navigation("CrcCrfs");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Dm", b =>
                 {
-                    b.Navigation("DmSites");
-
-                    b.Navigation("Queries");
+                    b.Navigation("DmQueries");
                 });
 
-            modelBuilder.Entity("CloverEdc.Core.Models.Patient", b =>
+            modelBuilder.Entity("CloverEdc.Core.Models.Query", b =>
                 {
-                    b.Navigation("Crfs");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.Protocol", b =>
-                {
-                    b.Navigation("Studies");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.Site", b =>
-                {
-                    b.Navigation("CrcSites");
-
-                    b.Navigation("DmSites");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.Study", b =>
-                {
-                    b.Navigation("Patients");
-
-                    b.Navigation("Sites");
+                    b.Navigation("DmQueries");
                 });
 #pragma warning restore 612, 618
         }

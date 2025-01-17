@@ -7,7 +7,7 @@ public class Protocol : EntityBase
 {
     public string Name { get; set; }
     public int NumOfVisits { get; set; }
-    public bool Randomization { get; set; } = false;
+    public bool Randomization { get; set; }
     [JsonIgnore]
     [NotMapped]
 

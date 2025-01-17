@@ -10,8 +10,5 @@ public class Dm : EntityBase
 
     [JsonIgnore]
     [NotMapped]
-    public ICollection<DmSite> DmSites { get; set; }
-    [JsonIgnore]
-    [NotMapped]
-    public ICollection<Query> Queries { get; set; }
+    public ICollection<DmQuery> DmQueries { get; set; }
 }

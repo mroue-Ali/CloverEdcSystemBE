@@ -20,6 +20,25 @@ public class ProtocolRepository : BaseRepository<Protocol>, IProtocolRepository
         return await _context.Protocols.FindAsync(id);
     }
 
+    public async Task<(IEnumerable<Protocol>, int)> GetPagedProtocolsAsync(Filter filter)
+    {
+        var query = _context.Protocols.AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {    
+            query = query.Where(r =>
+                r.Name.Contains(keyword)
+            );
+             
+        }    
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
+            .ToListAsync();
+
+        return (items, totalItems);
+    }
     public async Task<IEnumerable<Protocol>> GetAllAsync()
     {
         return await _context.Protocols.ToListAsync();

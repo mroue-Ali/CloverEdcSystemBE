@@ -51,19 +51,48 @@ public class CrcRepository : BaseRepository<Crc>, ICrcRepository
         _context.Crcs.Remove(crc);
         await _context.SaveChangesAsync();
         return true;
+        
     }
     
     public async Task<IEnumerable<Crc>> GetCrcsByStudyIdAsync(Guid studyId)
     {
         var crcs = await _context.Crcs
             .Include(c => c.User)
-            .Include(c => c.CrcSites)
             .Where(c => c.User.StudyId == studyId)
             .ToListAsync();
-
       
         return crcs;
     }
     
- 
+    public async Task<(IEnumerable<Crc>, int)> GetCrcsByStudyIdAsync(Guid studyId, Filter filter)
+    {
+        var query = _context.Crcs.Include(x => x.User).Where(x => x.User.StudyId == studyId).AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query
+                .Where(r => (r.User.FirstName.ToLower().Contains(keyword.ToLower()))||
+                            (r.User.LastName.ToLower().Contains(keyword.ToLower()))||
+                            (r.User.UserName.ToLower().Contains(keyword.ToLower())));
+        }
+
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
+            .ToListAsync();
+        var sitesDto = items.Select(x => new Crc
+        {
+            Id = x.Id,
+            User = new User
+            {
+                UserName = x.User.UserName,
+                FirstName = x.User.FirstName,
+                LastName = x.User.LastName,
+                Email = x.User.Email
+            },
+        });
+        return (sitesDto, totalItems);
+    }
+
 }

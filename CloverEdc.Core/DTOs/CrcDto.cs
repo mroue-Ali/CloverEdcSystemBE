@@ -15,6 +15,6 @@ public class CrcDto
     
     public string? Password { get; set; }
     
-    public List<Guid> SiteIds { get; set; }
+    public List<Guid>? SiteIds { get; set; }
     
 }

@@ -37,7 +37,7 @@ public class CrfValueService : ICrfValueService
 
         existingCrfValue.Value = crfvalue.Value;
         existingCrfValue.CrfFieldId = crfvalue.CrfFieldId;
-        existingCrfValue.CrfId = crfvalue.CrfId;
+        existingCrfValue.FileId = crfvalue.FileId;
         existingCrfValue.IsModified = true;
         existingCrfValue.DateUpdated = DateTime.Now;
 

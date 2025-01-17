@@ -8,6 +8,8 @@ public class CrfFieldDto
     public bool IsRequired { get; set; } = false;
     
     public Guid? RequiredFieldId { get; set; }
+    public Guid BaseFieldId { get; set; }
+    public Guid CrfFileId { get; set; }
     
     public Guid CrfPageId { get; set; }
 }

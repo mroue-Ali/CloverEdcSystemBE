@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using File = CloverEdc.Core.Models.File;
+using Type = CloverEdc.Core.Models.Type;
 
 namespace CloverEdc.Data.Context
 {
@@ -26,9 +28,10 @@ namespace CloverEdc.Data.Context
         public DbSet<Crf> Crfs { get; set; }
         public DbSet<CrfTemplate> CrfTemplates { get; set; }
         public DbSet<CrfFile> CrfFiles { get; set; }
-        public DbSet<CrfPage> CrfPages { get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<CrfField> CrfFields { get; set; }
         public DbSet<CrfValue> CrfValues { get; set; }
+        public DbSet<DropDownOption> DropDownOptions { get; set; }
 
         // Supporting Entities
         public DbSet<AuditTrail> AuditTrails { get; set; }
@@ -37,9 +40,10 @@ namespace CloverEdc.Data.Context
         public DbSet<Lock> Locks { get; set; }
 
         // Many-to-Many Relationship Tables
-        public DbSet<CrcSite> CrcSites { get; set; }
-        public DbSet<DmSite> DmSites { get; set; }
-        public DbSet<PiSite> PiSites { get; set; }
+        public DbSet<BaseField> BaseFields { get; set; }
+        public DbSet<Type> Types { get; set; }
+        public DbSet<DmQuery> DmQueries { get; set; }
+        public DbSet<CrcCrf> CrcCrfs { get; set; }
 
         // Requests
         public DbSet<UpdateRequest> UpdateRequests { get; set; }
@@ -52,25 +56,72 @@ namespace CloverEdc.Data.Context
             //     .HasOne(u => u.Role)
             //     .WithMany()
             //     .HasForeignKey(u => u.RoleId);
-            modelBuilder.Entity<Crc>()
-                .HasMany(c => c.CrcSites)
-                .WithOne(cs => cs.Crc)
-                .HasForeignKey(cs => cs.CrcId);
+            modelBuilder.Entity<CrcCrf>()
+                .HasKey(cc => new { cc.CrcId, cc.CrfId });
 
-            modelBuilder.Entity<CrcSite>()
-                .HasOne(cs => cs.Site)
-                .WithMany()
-                .HasForeignKey(cs => cs.SiteId);
+            modelBuilder.Entity<CrcCrf>()
+                .HasOne(cc => cc.Crc)
+                .WithMany(c => c.CrcCrfs)
+                .HasForeignKey(cc => cc.CrcId);
+
+            modelBuilder.Entity<CrcCrf>()
+                .HasOne(cc => cc.Crf)
+                .WithMany(c => c.CrcCrfs)
+                .HasForeignKey(cc => cc.CrfId);
+
+            // Repeat similar configurations for DmQuery
+            modelBuilder.Entity<DmQuery>()
+                .HasKey(dq => new { dq.DmId, dq.QueryId });
+
+            modelBuilder.Entity<DmQuery>()
+                .HasOne(dq => dq.Dm)
+                .WithMany(d => d.DmQueries)
+                .HasForeignKey(dq => dq.DmId);
+
+            modelBuilder.Entity<DmQuery>()
+                .HasOne(dq => dq.Query)
+                .WithMany(q => q.DmQueries)
+                .HasForeignKey(dq => dq.QueryId);
             
-            modelBuilder.Entity<Pi>()
-                .HasMany(c => c.PiSites)
-                .WithOne(cs => cs.Pi)
-                .HasForeignKey(cs => cs.PiId);
-
-            modelBuilder.Entity<PiSite>()
-                .HasOne(cs => cs.Site)
-                .WithMany()
-                .HasForeignKey(cs => cs.SiteId);
+            // modelBuilder.Entity<Dm>()
+            //     .HasMany(c => c.DmQueries)
+            //     .WithOne(cs => cs.Dm)
+            //     .HasForeignKey(cs => cs.DmId);
+            //
+            // modelBuilder.Entity<DmQuery>()
+            //     .HasOne(cs => cs.Dm)
+            //     .WithMany()
+            //     .HasForeignKey(cs => cs.DmId);
+            //
+            //   modelBuilder.Entity<Query>()
+            //     .HasMany(c => c.DmQueries)
+            //     .WithOne(cs => cs.Query)
+            //     .HasForeignKey(cs => cs.QueryId);
+            //
+            // modelBuilder.Entity<DmQuery>()
+            //     .HasOne(cs => cs.Query)
+            //     .WithMany()
+            //     .HasForeignKey(cs => cs.QueryId);
+            //
+            // modelBuilder.Entity<Crc>()
+            //     .HasMany(c => c.CrcCrfs)
+            //     .WithOne(cs => cs.Crc)
+            //     .HasForeignKey(cs => cs.CrcId);
+            //
+            // modelBuilder.Entity<CrcCrf>()
+            //     .HasOne(cs => cs.Crc)
+            //     .WithMany()
+            //     .HasForeignKey(cs => cs.CrcId);
+            //    modelBuilder.Entity<Crf>()
+            //     .HasMany(c => c.CrcCrfs)
+            //     .WithOne(cs => cs.Crf)
+            //     .HasForeignKey(cs => cs.CrfId);
+            //
+            // modelBuilder.Entity<CrcCrf>()
+            //     .HasOne(cs => cs.Crf)
+            //     .WithMany()
+            //     .HasForeignKey(cs => cs.CrfId);
+            //
             
             
             // Seed initial data
@@ -80,9 +131,8 @@ namespace CloverEdc.Data.Context
                 new Role { Id=Guid.Parse(adminGuid), Name = "Admin" },
                 new Role { Id = Guid.Parse(superAdminGuid), Name = "SuperAdmin" }
             );
-            var hashedPassword = new PasswordHasher<User>().HashPassword(null, "password");
+            var hashedPassword = new PasswordHasher<User>().HashPassword(null, "sa");
             modelBuilder.Entity<User>().HasData(
-                new User("admin", "A","Admin","admin@example.com", hashedPassword,Guid.Parse(adminGuid)),
                 new User("superAdmin", "Super","Admin","superAdmin@example.com", hashedPassword, Guid.Parse(superAdminGuid))
             );
         }

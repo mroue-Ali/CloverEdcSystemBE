@@ -36,9 +36,8 @@ public class CrfFieldService : ICrfFieldService
         if (existingCrfField == null) throw new KeyNotFoundException("CrfField not found");
         
         existingCrfField.FieldName = crffield.FieldName;
-        existingCrfField.FieldType = crffield.FieldType;
         existingCrfField.IsRequired = crffield.IsRequired;  
-        existingCrfField.CrfPageId = crffield.CrfPageId;
+        existingCrfField.BaseFieldId = crffield.BaseFieldId;
         existingCrfField.ValidationRules = crffield.ValidationRules;
         existingCrfField.RequiredFieldId = crffield.RequiredFieldId;
         return await _crffieldRepository.UpdateAsync(existingCrfField);

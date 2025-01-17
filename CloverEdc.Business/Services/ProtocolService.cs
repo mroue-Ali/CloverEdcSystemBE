@@ -20,6 +20,13 @@ public class ProtocolService : IProtocolService
         return await _protocolRepository.GetByIdAsync(id);
     }
 
+    public async Task<(IEnumerable<Protocol>,int)> GetPagedProtocolsAsync(Filter filter)
+    {
+        var (roles, totalItems) = await _protocolRepository.GetPagedProtocolsAsync(filter);
+
+        return (roles, totalItems);
+    }
+
     public async Task<IEnumerable<Protocol>> GetAllProtocolsAsync()
     {
         return await _protocolRepository.GetAllAsync();

@@ -25,19 +25,19 @@ public class SiteController : ControllerBase
     public async Task<IActionResult> GetAllSites([FromQuery] Filter filter)
     {
         var validFilter = new Filter(filter.offset, filter.size, filter.keyword);
-        var sites = await _siteService.GetAllSitesAsync();
-        var count = sites.Count();
-        //var (sites,count) = await _siteService.GetPagedSitesAsync(validFilter);
+        // var sites = await _siteService.GetAllSitesAsync();
+        // var count = sites.Count();
+        var (sites,count) = await _siteService.GetPagedFilteredItemsAsync(validFilter);
         return Ok(new Response<IEnumerable<Site>>(200, "Sites retrieved successfully", sites,count));
     }
     
     [HttpGet("{studyId}/study")]
-    public async Task<IActionResult> GetAllSitesByStudyId(Guid studyId)
+    public async Task<IActionResult> GetAllSitesByStudyId([FromQuery] Filter filter,Guid studyId)
     {
         try
         {
-            var sites = await _siteService.GetSitesByStudyIdAsync(studyId);
-            return Ok(new Response<IEnumerable<Site>>(200, "Sites retrieved successfully", sites));
+            var (sites,count) = await _siteService.GetSitesByStudyIdAsync(studyId,filter);
+            return Ok(new Response<IEnumerable<Site>>(200, "Sites retrieved successfully", sites,count));
             
         }
         catch (Exception e)

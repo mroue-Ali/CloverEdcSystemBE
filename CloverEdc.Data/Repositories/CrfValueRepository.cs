@@ -30,7 +30,8 @@ public class CrfValueRepository : BaseRepository<CrfValue>, ICrfValueRepository
         var newCrfValue = new CrfValue
         {
             CrfFieldId = crfvalue.CrfFieldId,
-            CrfId = crfvalue.CrfId,
+            FileId = crfvalue.FileId,
+            DropDownValueId = crfvalue.DropDownValueId,
             Value = crfvalue.Value,
             Status = crfvalue.Status,
             IsModified = crfvalue.IsModified,

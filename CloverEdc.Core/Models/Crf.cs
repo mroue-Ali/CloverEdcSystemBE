@@ -5,8 +5,8 @@ namespace CloverEdc.Core.Models;
 
 public class Crf : EntityBase
 {
-    public Guid StudyId { get; set; }
-    public Study Study { get; set; }
+    public Guid CrcId { get; set; }
+    public Crc Crc { get; set; }
 
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
@@ -16,5 +16,15 @@ public class Crf : EntityBase
 
     [JsonIgnore]
     [NotMapped]
-    public ICollection<CrfValue> CrfValues { get; set; }
+    public ICollection<File> Files { get; set; }
+    
+    [JsonIgnore]
+    [NotMapped]
+    public ICollection<CrcCrf> CrcCrfs { get; set; }
+    
+    [JsonIgnore]
+    [NotMapped]
+    public ICollection<AdverseEvent> AdverseEvents { get; set; }
+    
+    
 }

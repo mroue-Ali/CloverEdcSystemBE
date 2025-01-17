@@ -9,7 +9,6 @@ namespace CloverEdc.Api.Controllers;
 public class AdverseEventController : ControllerBase
 {
     private readonly IAdverseEventService _adverseeventService;
-
     public AdverseEventController(IAdverseEventService adverseeventService)
     {
         _adverseeventService = adverseeventService;

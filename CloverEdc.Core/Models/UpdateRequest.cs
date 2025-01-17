@@ -9,10 +9,4 @@ public class UpdateRequest : EntityBase
     public string Reason { get; set; }
     public string NewValue { get; set; }
 
-    
-    public Guid CrcId { get; set; }
-    public Crc Crc { get; set; }
-
-    // public Guid UserId { get; set; }
-    // public User User { get; set; } // User requesting the update
 }

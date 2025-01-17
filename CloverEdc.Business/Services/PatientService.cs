@@ -38,7 +38,6 @@ public class PatientService : IPatientService
         existingPatient.Code = patient.Code;
         existingPatient.Name = patient.Name;
         existingPatient.SiteId = patient.SiteId;
-        existingPatient.StudyId = patient.StudyId;
         return await _patientRepository.UpdateAsync(existingPatient);
     }
 

@@ -37,7 +37,7 @@ public class CrfService : ICrfService
 
         existingCrf.CrfTemplateId = crf.CrfTemplateId;
         existingCrf.PatientId = crf.PatientId;
-        existingCrf.StudyId = crf.StudyId;
+        existingCrf.CrcId = crf.CrcId;
         return await _crfRepository.UpdateAsync(existingCrf);
     }
 

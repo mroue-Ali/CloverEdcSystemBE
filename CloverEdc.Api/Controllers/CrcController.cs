@@ -31,10 +31,12 @@ public class CrcController : ControllerBase
         return Ok(new Response<IEnumerable<Crc>>(200, "Crcs retrieved successfully", crcs,count));
     }
     [HttpGet("{studyId}/study")]
-    public async Task<IActionResult> GetCrcsByStudyId(Guid studyId)
+    public async Task<IActionResult> GetCrcsByStudyId([FromQuery] Filter filter,Guid studyId)
     {
-        var crcs = await _crcService.GetCrcsByStudyIdAsync(studyId);
-        return Ok(new Response<IEnumerable<Crc>>(200, "Crcs retrieved successfully", crcs));
+        // var crcs = await _crcService.GetCrcsByStudyIdAsync(studyId);
+        var (crcs,count) = await _crcService.GetCrcsByStudyIdAsync(studyId,filter);
+
+        return Ok(new Response<IEnumerable<Crc>>(200, "Crcs retrieved successfully", crcs,count));
     }
     
     [HttpPost("{studyId}/study")]

@@ -11,17 +11,15 @@ public class CrcService : ICrcService
     private readonly ICrcRepository _crcRepository;
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
-    private readonly ICrcSiteRepository _crcSiteRepository;
     private readonly AuthHelper _authHelper;
 
     public CrcService(ICrcRepository crcRepository, IUserRepository userRepository, AuthHelper authHelper,
-        IRoleRepository roleRepository, ICrcSiteRepository crcSiteRepository)
+        IRoleRepository roleRepository)
     {
         _crcRepository = crcRepository;
         _userRepository = userRepository;
         _authHelper = authHelper;
         _roleRepository = roleRepository;
-        _crcSiteRepository = crcSiteRepository;
     }
 
 
@@ -61,15 +59,15 @@ public class CrcService : ICrcService
 
         var newCrc = await _crcRepository.CreateAsync(crc);
         
-        foreach (var crcSite in crc.SiteIds)
-        {
-            var newCrcSite = new CrcSiteDto
-            {
-                SiteId = crcSite,
-                CrcId = newCrc.Id
-            };
-            await _crcSiteRepository.CreateAsync(newCrcSite);
-        }
+        // foreach (var crcSite in crc.SiteIds)
+        // {
+        //     var newCrcSite = new CrcSiteDto
+        //     {
+        //         SiteId = crcSite,
+        //         CrcId = newCrc.Id
+        //     };
+        //     await _crcSiteRepository.CreateAsync(newCrcSite);
+        // }
 
         return newCrc;
     }
@@ -92,17 +90,17 @@ public class CrcService : ICrcService
             }
         }
         
-        await _crcSiteRepository.DeleteByCrcIdAsync(id);
+        // await _crcSiteRepository.DeleteByCrcIdAsync(id);
        
-        foreach (var siteId in crc.SiteIds)
-        {
-            var newCrcSite = new CrcSiteDto
-            {
-                SiteId = siteId,
-                CrcId = id
-            };
-            await _crcSiteRepository.CreateAsync(newCrcSite);
-        }
+        // foreach (var siteId in crc.SiteIds)
+        // {
+            // var newCrcSite = new CrcSiteDto
+            // {
+                // SiteId = siteId,
+                // CrcId = id
+            // };
+            // await _crcSiteRepository.CreateAsync(newCrcSite);
+        // }
         
         var user =  _userRepository.GetById(existingCrc.UserId);
         user.Email = crc.Email;
@@ -121,5 +119,9 @@ public class CrcService : ICrcService
     public async Task<IEnumerable<Crc>> GetCrcsByStudyIdAsync(Guid studyId)
     {
         return await _crcRepository.GetCrcsByStudyIdAsync(studyId);
+    }
+    public async Task<(IEnumerable<Crc>, int)> GetCrcsByStudyIdAsync(Guid studyId,Filter filter)
+    {
+        return await _crcRepository.GetCrcsByStudyIdAsync(studyId,filter);
     }
 }

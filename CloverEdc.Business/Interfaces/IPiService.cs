@@ -12,4 +12,6 @@ public interface IPiService
     Task<bool> DeletePiAsync(Guid id);
     
     Task<IEnumerable<Pi>> GetPisByStudyIdAsync(Guid studyId);
+    Task<(IEnumerable<Pi>, int)> GetPisByStudyIdAsync(Guid studyId,Filter filter);
+
 }

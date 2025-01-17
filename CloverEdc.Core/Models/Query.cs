@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace CloverEdc.Core.Models;
 
 public class Query : EntityBase
@@ -9,5 +12,10 @@ public class Query : EntityBase
     public Dm Dm { get; set; } // Data Manager issuing the query
 
     public string QueryText { get; set; }
-    public string Status { get; set; } = "Pending";
+    public string Status { get; set; }
+    
+    [JsonIgnore]
+    [NotMapped]
+    public ICollection<DmQuery> DmQueries { get; set; }
+    
 }

@@ -54,7 +54,6 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPiSiteRepository, PiSiteRepository>();
 builder.Services.AddScoped<AuthHelper>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
@@ -78,8 +77,6 @@ builder.Services.AddScoped<ICrfTemplateRepository, CrfTemplateRepository>();
 builder.Services.AddScoped<ICrfTemplateService, CrfTemplateService>();
 builder.Services.AddScoped<ICrfFileRepository, CrfFileRepository>();
 builder.Services.AddScoped<ICrfFileService, CrfFileService>();
-builder.Services.AddScoped<ICrfPageRepository, CrfPageRepository>();
-builder.Services.AddScoped<ICrfPageService, CrfPageService>();
 builder.Services.AddScoped<ICrfFieldRepository, CrfFieldRepository>();
 builder.Services.AddScoped<ICrfFieldService, CrfFieldService>();
 builder.Services.AddScoped<ICrfValueRepository, CrfValueRepository>();
@@ -92,10 +89,8 @@ builder.Services.AddScoped<IQueryRepository, QueryRepository>();
 builder.Services.AddScoped<IQueryService, QueryService>();
 builder.Services.AddScoped<ILockRepository, LockRepository>();
 builder.Services.AddScoped<ILockService, LockService>();
-builder.Services.AddScoped<ICrcSiteRepository, CrcSiteRepository>();
-builder.Services.AddScoped<ICrcSiteService, CrcSiteService>();
-builder.Services.AddScoped<IDmSiteRepository, DmSiteRepository>();
-builder.Services.AddScoped<IDmSiteService, DmSiteService>();
+// builder.Services.AddScoped<ICrcSiteRepository, CrcSiteRepository>();
+// builder.Services.AddScoped<ICrcSiteService, CrcSiteService>();
 builder.Services.AddScoped<IUpdateRequestRepository, UpdateRequestRepository>();
 builder.Services.AddScoped<IUpdateRequestService, UpdateRequestService>();
 #endregion

@@ -10,11 +10,13 @@ public class SiteService : ISiteService
 {
     private readonly ISiteRepository _siteRepository;
     private readonly IRoleRepository _roleRepository;
+    private readonly AuthHelper _authHelper;
 
-    public SiteService(ISiteRepository siteRepository,IRoleRepository roleRepository)
+    public SiteService(ISiteRepository siteRepository,IRoleRepository roleRepository, AuthHelper authHelper)
     {
         _siteRepository = siteRepository;
         _roleRepository = roleRepository;
+        _authHelper = authHelper;
     }
 
     public async Task<Site> GetSiteByIdAsync(Guid id)
@@ -26,7 +28,10 @@ public class SiteService : ISiteService
     {
         return await _siteRepository.GetAllAsync();
     }
-
+    public async  Task<(IEnumerable<Site>, int)> GetPagedFilteredItemsAsync(Filter filter)
+    {
+        return await _siteRepository.GetPagedFilteredItemsAsync(filter);
+    }
     public async Task<Site> CreateSiteAsync(SiteDto site)
     {
         return await _siteRepository.CreateAsync(site);
@@ -58,9 +63,9 @@ public class SiteService : ISiteService
         return await _siteRepository.DeleteAsync(id);
     }
     
-    public async Task<IEnumerable<Site>> GetSitesByStudyIdAsync(Guid studyId)
+    public async Task<(IEnumerable<Site>, int)> GetSitesByStudyIdAsync(Guid studyId,Filter filter)
     {
-        return await _siteRepository.GetSitesByStudyIdAsync(studyId);
+        return await _siteRepository.GetSitesByStudyIdAsync(studyId,filter);
     }
     
     public async Task<Pi> AddPrincipalInvestigatorToSiteAsync(Guid siteId, RegisterUserDto user)
@@ -68,12 +73,14 @@ public class SiteService : ISiteService
         var site = await _siteRepository.GetByIdAsync(siteId);
         if (site == null) return null;
         var role = await _roleRepository.GetRoleByNameAsync("PI");
+        var Password = _authHelper.CreatePasswordHash(user.Password);
+        var RefreshToken = _authHelper.GenerateRefreshToken();
         var newUser = new User
         {
             UserName = user.UserName,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Password = user.Password,
+            Password = Password,
             Email = user.Email,
             RoleId = role.Id,
             StudyId = site.StudyId

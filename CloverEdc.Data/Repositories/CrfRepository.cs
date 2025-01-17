@@ -29,7 +29,7 @@ public class CrfRepository : BaseRepository<Crf>, ICrfRepository
     {
         var newCrf = new Crf
         {
-            StudyId = crf.StudyId,
+            CrcId = crf.CrcId,
             PatientId = crf.PatientId,
             CrfTemplateId = crf.CrfTemplateId,
         };

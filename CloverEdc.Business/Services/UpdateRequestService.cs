@@ -37,7 +37,6 @@ public class UpdateRequestService : IUpdateRequestService
 
         existingUpdateRequest.Reason = updaterequest.Reason;
         existingUpdateRequest.Status = updaterequest.Status;
-        existingUpdateRequest.CrcId = updaterequest.CrcId;
         existingUpdateRequest.CrfValueId = updaterequest.CrfValueId;
         existingUpdateRequest.NewValue = updaterequest.NewValue;
         

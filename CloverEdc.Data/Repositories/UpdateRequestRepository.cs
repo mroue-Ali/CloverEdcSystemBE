@@ -33,7 +33,6 @@ public class UpdateRequestRepository : BaseRepository<UpdateRequest>, IUpdateReq
             Status = updaterequest.Status,
             Reason = updaterequest.Reason,
             NewValue = updaterequest.NewValue,
-            CrcId = updaterequest.CrcId,
         };
         _context.UpdateRequests.Add(newUpdateRequest);
         await _context.SaveChangesAsync();

@@ -7,6 +7,7 @@ public interface IStudyService
 {
     Task<Study> GetStudyByIdAsync(Guid id);
     Task<IEnumerable<Study>> GetAllStudiesAsync();
+    Task<(IEnumerable<Study>, int)> GetPagedFilteredItemsAsync(Filter filter);
     Task<Study> CreateStudyAsync(StudyDto study);
     Task<Study> UpdateStudyAsync(Guid id, StudyDto study);
     Task<bool> DeleteStudyAsync(Guid id);

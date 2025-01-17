@@ -37,6 +37,26 @@ public class StudyRepository : BaseRepository<Study>, IStudyRepository
         // return studyDtos;
     }
 
+    public async Task<(IEnumerable<Study>, int)> GetPagedFilteredItemsAsync(Filter filter)
+    {
+        var query = _context.Studies.Include(x=>x.Protocol).AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {    
+            query = query.Where(r =>
+                r.Name.Contains(keyword)
+            );
+             
+        }    
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
+            .ToListAsync();
+
+        return (items, totalItems);
+    }
+   
     public async Task<Study> CreateAsync(StudyDto study)
     {
         var newStudy = new Study

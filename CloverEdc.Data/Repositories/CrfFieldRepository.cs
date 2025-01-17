@@ -30,11 +30,11 @@ public class CrfFieldRepository : BaseRepository<CrfField>, ICrfFieldRepository
         var newCrfField = new CrfField
         {
             FieldName = crffield.FieldName,
-            FieldType = crffield.FieldType,
+            BaseFieldId = crffield.BaseFieldId,
             ValidationRules = crffield.ValidationRules,
             IsRequired = crffield.IsRequired,
             RequiredFieldId = crffield.RequiredFieldId,
-            CrfPageId = crffield.CrfPageId,
+            CrfFileId = crffield.CrfFileId
         };
         _context.CrfFields.Add(newCrfField);
         await _context.SaveChangesAsync();

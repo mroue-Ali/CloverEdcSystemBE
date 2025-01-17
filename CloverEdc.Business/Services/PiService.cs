@@ -9,18 +9,16 @@ namespace CloverEdc.Business.Services;
 public class PiService : IPiService
 {
     private readonly IPiRepository _piRepository;
-    private readonly IPiSiteRepository _piSiteRepository;
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly AuthHelper _authHelper;
 
-    public PiService(IPiRepository piRepository, IUserRepository userRepository,IRoleRepository roleRepository, AuthHelper authHelper,IPiSiteRepository piSiteRepository)
+    public PiService(IPiRepository piRepository, IUserRepository userRepository,IRoleRepository roleRepository, AuthHelper authHelper)
     {
         _piRepository = piRepository;
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _authHelper = authHelper;
-        _piSiteRepository = piSiteRepository;
     }
 
     public async Task<Pi> GetPiByIdAsync(Guid id)
@@ -60,15 +58,15 @@ public class PiService : IPiService
 
         var newCrc = await _piRepository.CreateAsync(pi);
         
-        foreach (var crcSite in pi.SiteIds)
-        {
-            var newCrcSite = new PiSiteDto
-            {   
-                SiteId = crcSite,
-                PiId = newCrc.Id
-            };
-            await _piSiteRepository.CreateAsync(newCrcSite);
-        }
+        // foreach (var crcSite in pi.SiteIds)
+        // {
+        //     var newCrcSite = new PiSiteDto
+        //     {   
+        //         SiteId = crcSite,
+        //         PiId = newCrc.Id
+        //     };
+        //     await _piSiteRepository.CreateAsync(newCrcSite);
+        // }
 
         return newCrc;
     }
@@ -91,17 +89,17 @@ public class PiService : IPiService
             }
         }
         
-        await _piSiteRepository.DeleteByPiIdAsync(id);
+        // await _piSiteRepository.DeleteByPiIdAsync(id);
        
-        foreach (var siteId in pi.SiteIds)
-        {
-            var newCrcSite = new PiSiteDto
-            {
-                SiteId = siteId,
-                PiId = id
-            };
-            await _piSiteRepository.CreateAsync(newCrcSite);
-        }
+        // foreach (var siteId in pi.SiteIds)
+        // {
+        //     var newCrcSite = new PiSiteDto
+        //     {
+        //         SiteId = siteId,
+        //         PiId = id
+        //     };
+        //     await _piSiteRepository.CreateAsync(newCrcSite);
+        // }
         //update the user info on the users table
         var user =  _userRepository.GetById(existingPi.UserId);
         user.Email = pi.Email;
@@ -122,5 +120,10 @@ public class PiService : IPiService
     {
         return await _piRepository.GetPisByStudyIdAsync(studyId);
     }
+    public async Task<(IEnumerable<Pi>, int)> GetPisByStudyIdAsync(Guid studyId,Filter filter)
+    {
+        return await _piRepository.GetPisByStudyIdAsync(studyId,filter);
+    }
+
     
 }

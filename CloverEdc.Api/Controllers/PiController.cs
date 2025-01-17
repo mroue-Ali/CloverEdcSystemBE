@@ -32,11 +32,13 @@ public class PiController : ControllerBase
     }
     //I want to get the pis that their site is in study of givin studyId in the parameter
     [HttpGet("{studyId}/study")]
-    public async Task<IActionResult> GetPisByStudyId(Guid studyId)
+    public async Task<IActionResult> GetPisByStudyId([FromQuery] Filter filter,Guid studyId)
     {
         
-        var pis = await _piService.GetPisByStudyIdAsync(studyId);
-        return Ok(new Response<IEnumerable<Pi>>(200, "Pis retrieved successfully", pis));
+        // var pis = await _piService.GetPisByStudyIdAsync(studyId);
+        var (pis,count) = await _piService.GetPisByStudyIdAsync(studyId,filter);
+
+        return Ok(new Response<IEnumerable<Pi>>(200, "Pis retrieved successfully", pis,count));
         
     }
     

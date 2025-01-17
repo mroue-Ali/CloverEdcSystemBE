@@ -25,9 +25,9 @@ public class StudyController : ControllerBase
     public async Task<IActionResult> GetAllStudies([FromQuery] Filter filter)
     {
         var validFilter = new Filter(filter.offset, filter.size, filter.keyword);
-        var studies = await _studyService.GetAllStudiesAsync();
-        var count = studies.Count();
-        //var (studies,count) = await _studyService.GetPagedStudiesAsync(validFilter);
+        // var studies = await _studyService.GetAllStudiesAsync();
+        // var count = studies.Count();
+        var (studies,count) = await _studyService.GetPagedFilteredItemsAsync(validFilter);
         return Ok(new Response<IEnumerable<Study>>(200, "Studies retrieved successfully", studies,count));
     }
     

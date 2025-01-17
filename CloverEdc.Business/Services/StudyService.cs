@@ -31,6 +31,10 @@ public class StudyService : IStudyService
     {
         return await _studyRepository.GetAllAsync();
     }
+ public async  Task<(IEnumerable<Study>, int)> GetPagedFilteredItemsAsync(Filter filter)
+    {
+        return await _studyRepository.GetPagedFilteredItemsAsync(filter);
+    }
 
     public async Task<Study> CreateStudyAsync(StudyDto study)
     {

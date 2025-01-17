@@ -4,6 +4,7 @@ using CloverEdc.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloverEdc.Api.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class ProtocolController : ControllerBase
@@ -21,24 +22,24 @@ public class ProtocolController : ControllerBase
         var result = await _protocolService.GetProtocolByIdAsync(id);
         return Ok(result);
     }
- [HttpGet]
+
+    [HttpGet]
     public async Task<IActionResult> GetAllProtocols([FromQuery] Filter filter)
     {
         var validFilter = new Filter(filter.offset, filter.size, filter.keyword);
-        var protocols = await _protocolService.GetAllProtocolsAsync();
-        var count = protocols.Count();
-        //var (protocols,count) = await _protocolService.GetPagedProtocolsAsync(validFilter);
-        return Ok(new Response<IEnumerable<Protocol>>(200, "Protocols retrieved successfully", protocols,count));
+        var (protocols, count) = await _protocolService.GetPagedProtocolsAsync(validFilter);
+
+        return Ok(new Response<IEnumerable<Protocol>>(200, "Protocols retrieved successfully", protocols, count));
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateProtocol(ProtocolDto protocol)
     {
         var createdProtocol = await _protocolService.CreateProtocolAsync(protocol);
         return CreatedAtAction(nameof(GetProtocolById), new { id = createdProtocol.Id }, createdProtocol);
     }
-    
-     [HttpPut("{id}")]
+
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProtocol(Guid id, [FromBody] ProtocolDto protocol)
     {
         try
@@ -57,10 +58,7 @@ public class ProtocolController : ControllerBase
     {
         var isDeleted = await _protocolService.DeleteProtocolAsync(id);
         if (!isDeleted) return NotFound(new Response<string>(404, "Protocol not found"));
-        
+
         return Ok(new Response<string>(200, "Protocol deleted successfully"));
     }
-
-    
-    
 }

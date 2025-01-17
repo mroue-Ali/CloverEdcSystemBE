@@ -10,5 +10,5 @@ public class Crc : EntityBase
 
     // [JsonIgnore]
     [NotMapped]
-    public ICollection<CrcSite> CrcSites { get; set; }
+    public ICollection<CrcCrf> CrcCrfs { get; set; }
 }
