@@ -1,0 +1,20 @@
+public interface I{{ModelName}}Service
+{
+Task<{{ModelName}}> GetByIdAsync(Guid id);
+Task<IEnumerable<{{ModelName}}>> GetAllAsync();
+Task<{{ModelName}}> CreateAsync({{ModelName}}Dto {{ModelNameLower}});
+Task<{{ModelName}}> UpdateAsync(Guid id, {{ModelName}}Dto {{ModelNameLower}});
+Task<bool> DeleteAsync(Guid id);
+    }
+
+    public class {{ModelName}}Service : I{{ModelName}}Service
+    {
+    private readonly I{{ModelName}}Repository _{{ModelNameLower}}Repository;
+
+    public {{ModelName}}Service(I{{ModelName}}Repository {{ModelNameLower}}Repository)
+    {
+    _{{ModelNameLower}}Repository = {{ModelNameLower}}Repository;
+    }
+
+    // Implement service logic here...
+    }
