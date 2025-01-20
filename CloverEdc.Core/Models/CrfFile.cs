@@ -7,6 +7,7 @@ namespace CloverEdc.Core.Models;
 public class CrfFile : EntityBase
 {
     public string Name { get; set; }
+    public int Index { get; set; }
     public Guid? RequiredFileId { get; set; }
     public Guid? ParentFileId { get; set; }
 
@@ -18,5 +19,6 @@ public class CrfFile : EntityBase
 
     [NotMapped] public CrfFile? ParentFile { get; set; }
 
-    [JsonIgnore] [NotMapped] public ICollection<CrfFile>? ChildsFiles { get; set; }
+    // [JsonIgnore]
+    [NotMapped] public ICollection<CrfFile>? SubFiles { get; set; }
 }

@@ -11,4 +11,6 @@ public interface IDmRepository : IBaseRepository<Dm>
     Task<Dm> UpdateAsync(Dm item);
     Task<bool> DeleteAsync(Guid id);
     Task<IEnumerable<Dm>> GetDmsByStudyIdAsync(Guid studyId);
+    Task<(IEnumerable<Dm>, int)> GetDmsByStudyIdAsync(Guid studyId,Filter filter);
+
 }

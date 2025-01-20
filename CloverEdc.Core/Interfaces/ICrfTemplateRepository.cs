@@ -10,4 +10,6 @@ public interface ICrfTemplateRepository : IBaseRepository<CrfTemplate>
     Task<CrfTemplate> CreateAsync(CrfTemplateDto crftemplate);
     Task<CrfTemplate> UpdateAsync(CrfTemplate item);
     Task<bool> DeleteAsync(Guid id);
+    Task<CrfTemplate> GetByStudyIdAsync(Guid studyId);
+        
 }

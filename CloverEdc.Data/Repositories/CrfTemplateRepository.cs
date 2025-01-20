@@ -54,4 +54,9 @@ public class CrfTemplateRepository : BaseRepository<CrfTemplate>, ICrfTemplateRe
         await _context.SaveChangesAsync();
         return true;
     }
+    
+    public async Task<CrfTemplate> GetByStudyIdAsync(Guid studyId)
+    {
+        return await _context.CrfTemplates.FirstOrDefaultAsync(x => x.StudyId == studyId);
+    }
 }

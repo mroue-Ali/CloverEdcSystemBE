@@ -10,4 +10,6 @@ public interface ICrfTemplateService
     Task<CrfTemplate> CreateCrfTemplateAsync(CrfTemplateDto crftemplate);
     Task<CrfTemplate> UpdateCrfTemplateAsync(Guid id, CrfTemplateDto crftemplate);
     Task<bool> DeleteCrfTemplateAsync(Guid id);
+    Task<CrfTemplate> GetCrfTemplateByStudyIdAsync(Guid studyId);
+    Task<IEnumerable<CrfFile>> GetCrfFilesByTemplateIdAsync(Guid templateId);
 }

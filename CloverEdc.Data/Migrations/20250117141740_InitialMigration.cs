@@ -666,18 +666,30 @@ namespace CloverEdc.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Protocols",
+                columns: new[] { "Id", "DateCreated", "DateDeleted", "DateUpdated", "IsDeleted", "Name", "NumOfVisits", "Randomization" },
+                values: new object[,]
+                {
+                    { new Guid("09d06cf3-0d7c-4e83-9154-791e0a0e0c14"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "Protocol-2", 2, false },
+                    { new Guid("a0ad495f-7427-4a47-b1a3-64a8b562a0f6"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "Protocol-1", 3, true }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "DateCreated", "DateDeleted", "DateUpdated", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("f45a7e79-845f-47df-af36-dc486e563772"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "Admin" },
-                    { new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "SuperAdmin" }
+                    { new Guid("3fd510fb-83ab-49c1-8a7b-32cdbd9920ff"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "DM" },
+                    { new Guid("635b2f08-21bd-4e5c-b7ec-e67d043c9381"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "SuperAdmin" },
+                    { new Guid("966d5963-5846-4bc9-afbd-b37bd6fcfc2c"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "Admin" },
+                    { new Guid("b4c9307c-2047-4f23-922b-da4d18ccbb47"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "PI" },
+                    { new Guid("bf1d3cca-15db-4890-b18d-c95f6647ec70"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, false, "CRC" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DateCreated", "DateDeleted", "DateUpdated", "Email", "FirstName", "IsDeleted", "LastName", "Password", "RefreshToken", "RoleId", "StudyId", "UserName" },
-                values: new object[] { new Guid("dcd232f6-4733-4659-b267-fe665b52b1a4"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "superAdmin@example.com", "Super", false, "Admin", "AQAAAAIAAYagAAAAEMDkgFp1n0ag3dUpyVTudD4lNoWeqNIK5qSfFLFYsffTsc+Eo7uaGyNOwPfHLOjUDQ==", new Guid("59db4b9f-845e-4d0f-89b4-c9cec6398ae7"), new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"), null, "superAdmin" });
+                values: new object[] { new Guid("4394f568-f2b0-4744-ae5c-b9c9b4b744b6"), new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "superAdmin@example.com", "Supera", false, "Admina", "eR1+zKbCL7GfNVY260MpFVRN1uYrfajRD7dch72/XjdWWrktmNqn8Gte4y1x4Rrs", new Guid("792fa12c-3ba8-42bc-b3e9-b61846b4bb65"), new Guid("635b2f08-21bd-4e5c-b7ec-e67d043c9381"), null, "superAdmina" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdverseEvents_CrfId",

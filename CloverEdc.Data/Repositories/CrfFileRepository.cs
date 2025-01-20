@@ -32,6 +32,7 @@ public class CrfFileRepository : BaseRepository<CrfFile>, ICrfFileRepository
             Name = crffile.Name,
             RequiredFileId = crffile.RequiredFileId,
             CrfTemplateId = crffile.CrfTemplateId,
+            Index = crffile.Index
         };
         _context.CrfFiles.Add(newCrfFile);
         await _context.SaveChangesAsync();
@@ -53,5 +54,22 @@ public class CrfFileRepository : BaseRepository<CrfFile>, ICrfFileRepository
         _context.CrfFiles.Remove(crffile);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<IEnumerable<CrfFile>> GetByTemplateIdAsync(Guid templateId)
+    {
+        var items = await _context.CrfFiles.Where(x => x.CrfTemplateId == templateId).ToListAsync();
+        var itemsDto = items.Select(x => new CrfFile
+        {
+            Id = x.Id,
+            Name = x.Name,
+            RequiredFileId = x.RequiredFileId,
+            CrfTemplateId = x.CrfTemplateId,
+            Index = x.Index,
+            ParentFileId = x.ParentFileId,
+            SubFiles = _context.CrfFiles.Where(a=>a.ParentFileId == x.Id).ToList()
+            
+        });
+        return itemsDto;
     }
 }

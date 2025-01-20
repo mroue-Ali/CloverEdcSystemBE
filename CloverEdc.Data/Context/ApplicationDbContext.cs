@@ -1,4 +1,5 @@
-﻿using CloverEdc.Core.Models;
+﻿using System.Security.Cryptography;
+using CloverEdc.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,18 @@ namespace CloverEdc.Data.Context
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        
+
         // Crc and Dm
         public DbSet<Crc> Crcs { get; set; }
         public DbSet<Dm> Dms { get; set; }
         public DbSet<Pi> Pis { get; set; }
-        
+
         // Sites, Studies, and Protocols
         public DbSet<Site> Sites { get; set; }
         public DbSet<Study> Studies { get; set; }
@@ -47,6 +51,7 @@ namespace CloverEdc.Data.Context
 
         // Requests
         public DbSet<UpdateRequest> UpdateRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -82,7 +87,7 @@ namespace CloverEdc.Data.Context
                 .HasOne(dq => dq.Query)
                 .WithMany(q => q.DmQueries)
                 .HasForeignKey(dq => dq.QueryId);
-            
+
             // modelBuilder.Entity<Dm>()
             //     .HasMany(c => c.DmQueries)
             //     .WithOne(cs => cs.Dm)
@@ -122,21 +127,51 @@ namespace CloverEdc.Data.Context
             //     .WithMany()
             //     .HasForeignKey(cs => cs.CrfId);
             //
-            
-            
+
+
             // Seed initial data
-            var adminGuid = "f45a7e79-845f-47df-af36-dc486e563772";
-            var superAdminGuid = "f567a244-752e-41c0-9af7-7bd85c71cf41";
+            var superAdminGuid = Guid.NewGuid();
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id=Guid.Parse(adminGuid), Name = "Admin" },
-                new Role { Id = Guid.Parse(superAdminGuid), Name = "SuperAdmin" }
+                new Role { Id = Guid.NewGuid(), Name = "Admin" },
+                new Role { Id = superAdminGuid, Name = "SuperAdmin" },
+                new Role { Id = Guid.NewGuid(), Name = "PI" },
+                new Role { Id = Guid.NewGuid(), Name = "CRC" },
+                new Role { Id = Guid.NewGuid(), Name = "DM" }
             );
-            var hashedPassword = new PasswordHasher<User>().HashPassword(null, "sa");
+            modelBuilder.Entity<Protocol>().HasData(
+                new Protocol { Id = Guid.NewGuid(), Name = "Protocol-1", NumOfVisits = 3, Randomization = true },
+                new Protocol { Id = Guid.NewGuid(), Name = "Protocol-2", NumOfVisits = 2, Randomization = false }
+            );
+            var hashedPassword = CreatePasswordHash("sa");
+
             modelBuilder.Entity<User>().HasData(
-                new User("superAdmin", "Super","Admin","superAdmin@example.com", hashedPassword, Guid.Parse(superAdminGuid))
+                new User("superAdmina", "Supera", "Admina", "superAdmin@example.com", hashedPassword,
+                    superAdminGuid)
             );
         }
-        
+
+        public string CreatePasswordHash(string password)
+        {
+            // Generate a 128-bit salt using a secure PRNG
+            byte[] salt = new byte[16];
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(salt);
+            }
+
+            // Generate a 256-bit hash using PBKDF2 with 100,000 iterations
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256))
+            {
+                byte[] hash = pbkdf2.GetBytes(32); // 32-byte hash
+
+                // Combine salt and hash as a single byte array
+                byte[] hashBytes = new byte[48]; // 16 bytes for salt + 32 bytes for hash
+                Array.Copy(salt, 0, hashBytes, 0, 16);
+                Array.Copy(hash, 0, hashBytes, 16, 32);
+
+                // Convert to base64 for storage
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
     }
-   
 }

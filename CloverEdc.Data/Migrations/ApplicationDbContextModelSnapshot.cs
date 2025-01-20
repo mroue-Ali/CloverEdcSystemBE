@@ -661,6 +661,26 @@ namespace CloverEdc.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Protocols");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a0ad495f-7427-4a47-b1a3-64a8b562a0f6"),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Name = "Protocol-1",
+                            NumOfVisits = 3,
+                            Randomization = true
+                        },
+                        new
+                        {
+                            Id = new Guid("09d06cf3-0d7c-4e83-9154-791e0a0e0c14"),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Name = "Protocol-2",
+                            NumOfVisits = 2,
+                            Randomization = false
+                        });
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Query", b =>
@@ -733,17 +753,38 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f45a7e79-845f-47df-af36-dc486e563772"),
+                            Id = new Guid("966d5963-5846-4bc9-afbd-b37bd6fcfc2c"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"),
+                            Id = new Guid("635b2f08-21bd-4e5c-b7ec-e67d043c9381"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("b4c9307c-2047-4f23-922b-da4d18ccbb47"),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Name = "PI"
+                        },
+                        new
+                        {
+                            Id = new Guid("bf1d3cca-15db-4890-b18d-c95f6647ec70"),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Name = "CRC"
+                        },
+                        new
+                        {
+                            Id = new Guid("3fd510fb-83ab-49c1-8a7b-32cdbd9920ff"),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Name = "DM"
                         });
                 });
 
@@ -953,16 +994,16 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dcd232f6-4733-4659-b267-fe665b52b1a4"),
+                            Id = new Guid("4394f568-f2b0-4744-ae5c-b9c9b4b744b6"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "superAdmin@example.com",
-                            FirstName = "Super",
+                            FirstName = "Supera",
                             IsDeleted = false,
-                            LastName = "Admin",
-                            Password = "AQAAAAIAAYagAAAAEMDkgFp1n0ag3dUpyVTudD4lNoWeqNIK5qSfFLFYsffTsc+Eo7uaGyNOwPfHLOjUDQ==",
-                            RefreshToken = new Guid("59db4b9f-845e-4d0f-89b4-c9cec6398ae7"),
-                            RoleId = new Guid("f567a244-752e-41c0-9af7-7bd85c71cf41"),
-                            UserName = "superAdmin"
+                            LastName = "Admina",
+                            Password = "eR1+zKbCL7GfNVY260MpFVRN1uYrfajRD7dch72/XjdWWrktmNqn8Gte4y1x4Rrs",
+                            RefreshToken = new Guid("792fa12c-3ba8-42bc-b3e9-b61846b4bb65"),
+                            RoleId = new Guid("635b2f08-21bd-4e5c-b7ec-e67d043c9381"),
+                            UserName = "superAdmina"
                         });
                 });
 

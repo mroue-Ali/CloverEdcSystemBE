@@ -10,4 +10,6 @@ public interface ICrfFileRepository : IBaseRepository<CrfFile>
     Task<CrfFile> CreateAsync(CrfFileDto crffile);
     Task<CrfFile> UpdateAsync(CrfFile item);
     Task<bool> DeleteAsync(Guid id);
+    Task<IEnumerable<CrfFile>> GetByTemplateIdAsync(Guid templateId);
+    
 }

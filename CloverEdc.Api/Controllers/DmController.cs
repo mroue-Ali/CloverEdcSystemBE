@@ -31,11 +31,13 @@ public class DmController : ControllerBase
         return Ok(new Response<IEnumerable<Dm>>(200, "Dms retrieved successfully", dms,count));
     }
     [HttpGet("{studyId}/study")]
-    public async Task<IActionResult> GetDmsByStudyId(Guid studyId)
+    public async Task<IActionResult> GetDmsByStudyId([FromQuery] Filter filter,Guid studyId)
     {
         
-        var dms = await _dmService.GetDmsByStudyIdAsync(studyId);
-        return Ok(new Response<IEnumerable<Dm>>(200, "Dms retrieved successfully", dms));
+        // var dms = await _dmService.GetDmsByStudyIdAsync(studyId);
+        var (dms,count) = await _dmService.GetDmsByStudyIdAsync(studyId,filter);
+
+        return Ok(new Response<IEnumerable<Dm>>(200, "Dms retrieved successfully", dms,count));
         
     }
     [HttpPost("{studyId}")]

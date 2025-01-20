@@ -12,13 +12,15 @@ public class DmService : IDmService
     private readonly IRoleRepository _roleRepository;
     private readonly IStudyRepository _studyRepository;
     private readonly IUserRepository _userRepository;
+    private readonly AuthHelper _authHelper;
 
-    public DmService(IDmRepository dmRepository,IRoleRepository roleRepository,IStudyRepository studyRepository,IUserRepository userRepository)
+    public DmService(AuthHelper authHelper,IDmRepository dmRepository,IRoleRepository roleRepository,IStudyRepository studyRepository,IUserRepository userRepository)
     {
         _dmRepository = dmRepository;
         _roleRepository = roleRepository;
         _studyRepository = studyRepository;
         _userRepository = userRepository;
+        _authHelper = authHelper;
     }
 
     public async Task<Dm> GetDmByIdAsync(Guid id)
@@ -36,12 +38,16 @@ public class DmService : IDmService
         var study = await _studyRepository.GetByIdAsync(studyId);
         if (study == null) return null;
         var role = await _roleRepository.GetRoleByNameAsync("DM");
+        
+        var Password = _authHelper.CreatePasswordHash(dm.Password);
+        var RefreshToken = _authHelper.GenerateRefreshToken();
         var newUser = new User
         {
             UserName = dm.UserName,
             FirstName = dm.FirstName,
             LastName = dm.LastName,
-            Password = dm.Password,
+            Password = Password,
+            RefreshToken = RefreshToken,
             Email = dm.Email,
             RoleId = role.Id,
             StudyId = studyId
@@ -89,5 +95,9 @@ public class DmService : IDmService
     public async Task<IEnumerable<Dm>> GetDmsByStudyIdAsync(Guid studyId)
     {
         return await _dmRepository.GetDmsByStudyIdAsync(studyId);
+    }
+    public async Task<(IEnumerable<Dm>, int)> GetDmsByStudyIdAsync(Guid studyId,Filter filter)
+    {
+        return await _dmRepository.GetDmsByStudyIdAsync(studyId,filter);
     }
 }

@@ -57,4 +57,35 @@ public class DmRepository : BaseRepository<Dm>, IDmRepository
     {
         return await _context.Dms.Include(x=>x.User).Where(dm => dm.User.StudyId == studyId).ToListAsync();
     }
+    public async Task<(IEnumerable<Dm>, int)> GetDmsByStudyIdAsync(Guid studyId, Filter filter)
+    {
+        var query = _context.Dms.Include(x => x.User).Where(x => x.User.StudyId == studyId).AsQueryable();
+        var keyword = filter.keyword;
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query
+                .Where(r => (r.User.FirstName.ToLower().Contains(keyword.ToLower()))||
+                            (r.User.LastName.ToLower().Contains(keyword.ToLower()))||
+                            (r.User.UserName.ToLower().Contains(keyword.ToLower())));
+        }
+
+        var totalItems = await query.CountAsync();
+        var items = await query
+            .Skip((filter.offset) * filter.size)
+            .Take(filter.size)
+            .ToListAsync();
+        var itemsDto = items.Select(x => new Dm
+        {
+            Id = x.Id,
+            User = new User
+            {
+                UserName = x.User.UserName,
+                FirstName = x.User.FirstName,
+                LastName = x.User.LastName,
+                Email = x.User.Email
+            },
+        });
+        return (itemsDto, totalItems);
+    }
+
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CloverEdc.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4f832944399ffbb39d88b1f0bff042956cf4a0f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f256f4056606153d7d8a7b7bb3920c063a22dd2b")]
 [assembly: System.Reflection.AssemblyProductAttribute("CloverEdc.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CloverEdc.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

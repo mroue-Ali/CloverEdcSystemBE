@@ -11,4 +11,6 @@ public interface IDmService
     Task<Dm> UpdateDmAsync(Guid id, DmDto dm);
     Task<bool> DeleteDmAsync(Guid id);
     Task<IEnumerable<Dm>> GetDmsByStudyIdAsync(Guid studyId);
+    Task<(IEnumerable<Dm>, int)> GetDmsByStudyIdAsync(Guid studyId,Filter filter);
+
 }

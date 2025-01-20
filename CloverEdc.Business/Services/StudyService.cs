@@ -12,14 +12,18 @@ public class StudyService : IStudyService
     private readonly AuthHelper _authHelper;
     private readonly IRoleRepository _roleRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ICrfTemplateRepository _crfTemplateRepository;
+    private readonly ICrfTemplateService _crfTemplateService;
 
-    public StudyService(IStudyRepository studyRepository, IRoleRepository roleRepository, AuthHelper authHelper,
+    public StudyService(ICrfTemplateService crfTemplateService,ICrfTemplateRepository crfTemplateRepository,IStudyRepository studyRepository, IRoleRepository roleRepository, AuthHelper authHelper,
         IUserRepository userRepository)
     {
         _studyRepository = studyRepository;
         _roleRepository = roleRepository;
         _authHelper = authHelper;
         _userRepository = userRepository;
+        _crfTemplateRepository = crfTemplateRepository;
+        _crfTemplateService = crfTemplateService;
     }
 
     public async Task<Study> GetStudyByIdAsync(Guid id)
@@ -36,9 +40,19 @@ public class StudyService : IStudyService
         return await _studyRepository.GetPagedFilteredItemsAsync(filter);
     }
 
-    public async Task<Study> CreateStudyAsync(StudyDto study)
+    public async Task<Study> CreateStudyAsync(StudyDto studyDto)
     {
-        return await _studyRepository.CreateAsync(study);
+        var study = await _studyRepository.CreateAsync(studyDto);
+        await _crfTemplateService.CreateCrfTemplateAsync(new CrfTemplateDto
+        {
+            Name = "Default",
+            StudyId = study.Id,
+            Code = "default"+"-"+study.Name+"|"+study.Id,
+            
+        });
+      
+        
+        return study;
     }
 
     public async Task<Study> UpdateStudyAsync(Guid id, StudyDto study)

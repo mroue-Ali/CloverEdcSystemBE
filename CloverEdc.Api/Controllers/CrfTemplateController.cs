@@ -4,6 +4,7 @@ using CloverEdc.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloverEdc.Api.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class CrfTemplateController : ControllerBase
@@ -21,24 +22,37 @@ public class CrfTemplateController : ControllerBase
         var result = await _crftemplateService.GetCrfTemplateByIdAsync(id);
         return Ok(result);
     }
- [HttpGet]
+    //${studyId}/template
+    [HttpGet("{studyId}/template")]
+    public async Task<IActionResult> GetCrfTemplateByStudyId(Guid studyId)
+    {
+        var result = await _crftemplateService.GetCrfTemplateByStudyIdAsync(studyId);
+        return Ok(result);
+    }
+    [HttpGet("{templateId}/files")]
+    public async Task<IActionResult> GetCrfFilesByTemplateId(Guid templateId)
+    {
+        var result = await _crftemplateService.GetCrfFilesByTemplateIdAsync(templateId);
+        return Ok(result);
+    }
+    [HttpGet]
     public async Task<IActionResult> GetAllCrfTemplates([FromQuery] Filter filter)
     {
         var validFilter = new Filter(filter.offset, filter.size, filter.keyword);
         var crftemplates = await _crftemplateService.GetAllCrfTemplatesAsync();
         var count = crftemplates.Count();
         //var (crftemplates,count) = await _crftemplateService.GetPagedCrfTemplatesAsync(validFilter);
-        return Ok(new Response<IEnumerable<CrfTemplate>>(200, "CrfTemplates retrieved successfully", crftemplates,count));
+        return Ok(new Response<IEnumerable<CrfTemplate>>(200, "CrfTemplates retrieved successfully", crftemplates, count));
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateCrfTemplate(CrfTemplateDto crftemplate)
     {
         var createdCrfTemplate = await _crftemplateService.CreateCrfTemplateAsync(crftemplate);
         return CreatedAtAction(nameof(GetCrfTemplateById), new { id = createdCrfTemplate.Id }, createdCrfTemplate);
     }
-    
-     [HttpPut("{id}")]
+
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCrfTemplate(Guid id, [FromBody] CrfTemplateDto crftemplate)
     {
         try
@@ -57,10 +71,7 @@ public class CrfTemplateController : ControllerBase
     {
         var isDeleted = await _crftemplateService.DeleteCrfTemplateAsync(id);
         if (!isDeleted) return NotFound(new Response<string>(404, "CrfTemplate not found"));
-        
+
         return Ok(new Response<string>(200, "CrfTemplate deleted successfully"));
     }
-
-    
-    
 }

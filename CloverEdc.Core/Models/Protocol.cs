@@ -11,5 +11,5 @@ public class Protocol : EntityBase
     [JsonIgnore]
     [NotMapped]
 
-    public ICollection<Study> Studies { get; set; }
+    public ICollection<Study>? Studies { get; set; }
 }

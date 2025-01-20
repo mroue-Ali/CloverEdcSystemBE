@@ -9,10 +9,12 @@ namespace CloverEdc.Business.Services;
 public class CrfTemplateService : ICrfTemplateService
 {
     private readonly ICrfTemplateRepository _crftemplateRepository;
+    private readonly ICrfFileRepository _crfFileRepository;
 
-    public CrfTemplateService(ICrfTemplateRepository crftemplateRepository)
+    public CrfTemplateService(ICrfTemplateRepository crftemplateRepository, ICrfFileRepository crfFileRepository)
     {
         _crftemplateRepository = crftemplateRepository;
+        _crfFileRepository = crfFileRepository;
     }
 
     public async Task<CrfTemplate> GetCrfTemplateByIdAsync(Guid id)
@@ -27,7 +29,35 @@ public class CrfTemplateService : ICrfTemplateService
 
     public async Task<CrfTemplate> CreateCrfTemplateAsync(CrfTemplateDto crftemplate)
     {
-        return await _crftemplateRepository.CreateAsync(crftemplate);
+        var template = await _crftemplateRepository.CreateAsync(crftemplate);
+        // add files to the crftemplate
+       var inclusion= await _crfFileRepository.CreateAsync(new CrfFileDto
+        {
+            CrfTemplateId = template.Id,
+            Name = "Incusion",
+            Index = 1
+        });
+        var exclusion= await _crfFileRepository.CreateAsync(new CrfFileDto
+        {
+            CrfTemplateId = template.Id,
+            Name = "Exclusion", 
+            Index = 2,
+            RequiredFileId = inclusion.Id
+        });
+        var baseLine = await _crfFileRepository.CreateAsync(new CrfFileDto
+        {
+            CrfTemplateId = template.Id,
+            Name = "BaseLine",
+            Index = 3,
+            RequiredFileId = exclusion.Id
+        });
+        var endOfStudy = await _crfFileRepository.CreateAsync(new CrfFileDto
+        {
+            CrfTemplateId = template.Id,
+            Name = "End Of Study",
+            Index = 1000,
+        });
+        return template;
     }
 
     public async Task<CrfTemplate> UpdateCrfTemplateAsync(Guid id, CrfTemplateDto crftemplate)
@@ -38,12 +68,22 @@ public class CrfTemplateService : ICrfTemplateService
         existingCrfTemplate.Name = crftemplate.Name;
         existingCrfTemplate.Code = crftemplate.Code;
         existingCrfTemplate.StudyId = crftemplate.StudyId;
-        
+
         return await _crftemplateRepository.UpdateAsync(existingCrfTemplate);
     }
 
     public async Task<bool> DeleteCrfTemplateAsync(Guid id)
     {
         return await _crftemplateRepository.DeleteAsync(id);
+    }
+    
+    public async Task<CrfTemplate> GetCrfTemplateByStudyIdAsync(Guid studyId)
+    {
+        return await _crftemplateRepository.GetByStudyIdAsync(studyId);
+    }
+    
+    public async Task<IEnumerable<CrfFile>> GetCrfFilesByTemplateIdAsync(Guid templateId)
+    {
+        return await _crfFileRepository.GetByTemplateIdAsync(templateId);
     }
 }
