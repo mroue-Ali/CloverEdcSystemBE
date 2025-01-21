@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverEdc.Data", "CloverEdc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloverEdc.Core", "CloverEdc.Core\CloverEdc.Core.csproj", "{5A785543-E37E-4284-AE24-D6068963F3EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{12522E56-C1D6-4D2F-8D54-C603E77B24FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{5A785543-E37E-4284-AE24-D6068963F3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A785543-E37E-4284-AE24-D6068963F3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A785543-E37E-4284-AE24-D6068963F3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12522E56-C1D6-4D2F-8D54-C603E77B24FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12522E56-C1D6-4D2F-8D54-C603E77B24FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12522E56-C1D6-4D2F-8D54-C603E77B24FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12522E56-C1D6-4D2F-8D54-C603E77B24FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
