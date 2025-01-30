@@ -4,6 +4,7 @@ using CloverEdc.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloverEdc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250122170233_SeedTypeTable")]
+    partial class SeedTypeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +108,6 @@ namespace CloverEdc.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CrfTemplateId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
 
@@ -128,8 +128,6 @@ namespace CloverEdc.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CrfTemplateId");
 
                     b.HasIndex("TypeId");
 
@@ -681,7 +679,7 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c73df170-f3f9-404a-89cc-6e5bbd9ddc97"),
+                            Id = new Guid("c53a6657-7be0-4c1e-ae21-69ef395de9b2"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "Protocol-1",
@@ -690,7 +688,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ac96081e-4ac2-4753-9723-9be653ec6a6b"),
+                            Id = new Guid("234ebf04-2019-4103-ac66-56c4d8546984"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "Protocol-2",
@@ -769,35 +767,35 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d5dd93c9-c0f6-4e81-b431-a85de6ad4ca2"),
+                            Id = new Guid("f7005a56-6273-4bbc-b96f-826bd49d1ddf"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = new Guid("e2d97a60-176a-4979-af84-4a9b25fe7681"),
+                            Id = new Guid("94a52d54-c446-470b-93c7-98676b0c46ef"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "SuperAdmin"
                         },
                         new
                         {
-                            Id = new Guid("effb05be-8aec-4df4-a5f4-ea22c30db903"),
+                            Id = new Guid("479c485b-e6d7-4137-a41c-943275e1e0f7"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "PI"
                         },
                         new
                         {
-                            Id = new Guid("bf1dcc22-c99c-42f7-a60e-8114aea10bc9"),
+                            Id = new Guid("de1c3bde-444d-4de2-ab56-8f923628676d"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "CRC"
                         },
                         new
                         {
-                            Id = new Guid("dbdf1958-6ca4-497f-8f72-69490265f978"),
+                            Id = new Guid("ce85653c-5521-4d84-9800-93b66fc217ff"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Name = "DM"
@@ -914,7 +912,7 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("39799cac-1b8d-4b6a-912f-53b5f9063b86"),
+                            Id = new Guid("b912ced8-67bd-4583-bd25-8593ad09d25d"),
                             DataType = "string",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -922,7 +920,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6931e2d3-4c18-4e58-9565-535ee757586c"),
+                            Id = new Guid("a624b7d8-dd79-4fe9-86fb-5d8f39b0f8bb"),
                             DataType = "decimal",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -930,7 +928,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ecad5376-ada1-4f8e-9e41-f57d8c661129"),
+                            Id = new Guid("2ba95634-97f3-4313-a2b8-38aff2e587b9"),
                             DataType = "DateTime",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -938,7 +936,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("061b60b2-5215-42ec-9eb7-90cc1614e25e"),
+                            Id = new Guid("8d05441f-bf16-4928-86ea-f09ec1a52219"),
                             DataType = "List<string>",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -946,7 +944,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("657f10f0-68fc-437e-8f86-e371e748f4ca"),
+                            Id = new Guid("cb2b6926-fbce-45f7-b56b-41dc1ad9b41f"),
                             DataType = "File",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -954,7 +952,7 @@ namespace CloverEdc.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("14e2ca0f-4bb6-4acc-8acd-08c052f67a22"),
+                            Id = new Guid("61c0b7b4-a0db-4fa5-b593-05de15b0a4da"),
                             DataType = "bool",
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -1060,15 +1058,15 @@ namespace CloverEdc.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("75ee4d19-8ac1-49e3-918e-b186196e4781"),
+                            Id = new Guid("fd72e76e-6b58-46d2-9903-a6afb38dc514"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "superAdmin@example.com",
                             FirstName = "Supera",
                             IsDeleted = false,
                             LastName = "Admina",
-                            Password = "kgisPpnw3pBhDDvyp6IoT7cWy8mXZ5CdIKe1y/827+S3wzDAawDq9PcZW58XIsXf",
-                            RefreshToken = new Guid("4216694e-b595-4940-9cd6-09466b3d99f8"),
-                            RoleId = new Guid("e2d97a60-176a-4979-af84-4a9b25fe7681"),
+                            Password = "i35LXzP80StjUXPntX0Sz5XQGXPEfWGrN+UsGaPjTSaVj6FlAwB3XX3+FFulZ6XR",
+                            RefreshToken = new Guid("9e0d9f97-c76e-4d80-a6c1-d3317d5f18e2"),
+                            RoleId = new Guid("94a52d54-c446-470b-93c7-98676b0c46ef"),
                             UserName = "superAdmina"
                         });
                 });
@@ -1097,19 +1095,11 @@ namespace CloverEdc.Data.Migrations
 
             modelBuilder.Entity("CloverEdc.Core.Models.BaseField", b =>
                 {
-                    b.HasOne("CloverEdc.Core.Models.CrfTemplate", "CrfTemplate")
-                        .WithMany()
-                        .HasForeignKey("CrfTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CloverEdc.Core.Models.Type", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CrfTemplate");
 
                     b.Navigation("Type");
                 });
@@ -1275,7 +1265,7 @@ namespace CloverEdc.Data.Migrations
             modelBuilder.Entity("CloverEdc.Core.Models.DropDownOption", b =>
                 {
                     b.HasOne("CloverEdc.Core.Models.BaseField", "BaseField")
-                        .WithMany("DropDownOptions")
+                        .WithMany()
                         .HasForeignKey("BaseFieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1416,11 +1406,6 @@ namespace CloverEdc.Data.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("Study");
-                });
-
-            modelBuilder.Entity("CloverEdc.Core.Models.BaseField", b =>
-                {
-                    b.Navigation("DropDownOptions");
                 });
 
             modelBuilder.Entity("CloverEdc.Core.Models.Crc", b =>

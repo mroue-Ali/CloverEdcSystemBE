@@ -55,7 +55,18 @@ namespace CloverEdc.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
+            modelBuilder.Entity<CrfFile>()
+            .HasMany(e => e.SubFiles)
+            .WithOne()
+            .HasForeignKey(e => e.ParentFileId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<BaseField>()
+                .HasMany(b => b.DropDownOptions)
+                .WithOne(d => d.BaseField)
+                .HasForeignKey(d => d.BaseFieldId);
+            
             // // Define relationships
             // modelBuilder.Entity<User>()
             //     .HasOne(u => u.Role)
@@ -130,7 +141,17 @@ namespace CloverEdc.Data.Context
 
 
             // Seed initial data
+            //what is decimal in .Net Core
+            //https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
             var superAdminGuid = Guid.NewGuid();
+           modelBuilder.Entity<Type>().HasData(
+                new Type { Id = Guid.NewGuid(), Name = "Text",DataType = "string" },
+                new Type { Id = Guid.NewGuid(), Name = "Number" ,DataType = "decimal"},
+                new Type { Id = Guid.NewGuid(), Name = "Date" ,DataType = "DateTime"},
+                new Type { Id = Guid.NewGuid(), Name = "DropDown" , DataType = "List<string>"},
+                new Type { Id = Guid.NewGuid(), Name = "File" , DataType = "File"},
+                new Type { Id = Guid.NewGuid(), Name = "ToggleButton" , DataType = "bool"}  
+            );
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = Guid.NewGuid(), Name = "Admin" },
                 new Role { Id = superAdminGuid, Name = "SuperAdmin" },

@@ -6,7 +6,7 @@ namespace CloverEdc.Core.Models;
 public class CrfField : EntityBase
 {
     public string FieldName { get; set; }
-    public string ValidationRules { get; set; }
+    public string? ValidationRules { get; set; }
     public bool IsRequired { get; set; }
     
     public Guid CrfFileId { get; set; }
@@ -18,7 +18,8 @@ public class CrfField : EntityBase
     public Guid? RequiredOptionId { get; set; }
     [NotMapped]
     public DropDownOption RequiredOption { get; set; }
-
+    
+    public String? RequiredFieldValue { get; set; }
     public Guid? RequiredFieldId { get; set; }
     [NotMapped]
     public CrfField RequiredField { get; set; }

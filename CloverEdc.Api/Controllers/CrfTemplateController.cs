@@ -22,6 +22,7 @@ public class CrfTemplateController : ControllerBase
         var result = await _crftemplateService.GetCrfTemplateByIdAsync(id);
         return Ok(result);
     }
+
     //${studyId}/template
     [HttpGet("{studyId}/template")]
     public async Task<IActionResult> GetCrfTemplateByStudyId(Guid studyId)
@@ -29,12 +30,16 @@ public class CrfTemplateController : ControllerBase
         var result = await _crftemplateService.GetCrfTemplateByStudyIdAsync(studyId);
         return Ok(result);
     }
+
     [HttpGet("{templateId}/files")]
     public async Task<IActionResult> GetCrfFilesByTemplateId(Guid templateId)
     {
         var result = await _crftemplateService.GetCrfFilesByTemplateIdAsync(templateId);
         return Ok(result);
     }
+
+   
+
     [HttpGet]
     public async Task<IActionResult> GetAllCrfTemplates([FromQuery] Filter filter)
     {
@@ -42,7 +47,8 @@ public class CrfTemplateController : ControllerBase
         var crftemplates = await _crftemplateService.GetAllCrfTemplatesAsync();
         var count = crftemplates.Count();
         //var (crftemplates,count) = await _crftemplateService.GetPagedCrfTemplatesAsync(validFilter);
-        return Ok(new Response<IEnumerable<CrfTemplate>>(200, "CrfTemplates retrieved successfully", crftemplates, count));
+        return Ok(new Response<IEnumerable<CrfTemplate>>(200, "CrfTemplates retrieved successfully", crftemplates,
+            count));
     }
 
     [HttpPost]

@@ -13,6 +13,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbCont
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
         optionsBuilder.UseSqlServer("Server=localhost;Database=CloverEdcSystem;Trusted_Connection=True;TrustServerCertificate=True;");
+        // optionsBuilder.UseSqlServer("Server=localhost;Database=CloverTest;Trusted_Connection=True;TrustServerCertificate=True;");
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }
