@@ -10,4 +10,6 @@ public interface ICrfFileService
     Task<CrfFile> CreateCrfFileAsync(CrfFileDto crffile);
     Task<CrfFile> UpdateCrfFileAsync(Guid id, CrfFileDto crffile);
     Task<bool> DeleteCrfFileAsync(Guid id);
+    Task SoftDeleteFileAsync(Guid fileId);
+    Task ActualDeleteFileAsync(Guid fileId);
 }

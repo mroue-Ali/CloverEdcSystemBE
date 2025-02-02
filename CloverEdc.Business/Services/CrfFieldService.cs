@@ -14,7 +14,27 @@ public class CrfFieldService : ICrfFieldService
     {
         _crffieldRepository = crffieldRepository;
     }
+    public async Task<CrfField> AddFieldToFileAsync(CrfFieldDto request)
+    {
+        var crfField = new CrfField
+        {
+            Id = Guid.NewGuid(),
+            FieldName = request.FieldName,
+            CrfFileId = request.CrfFileId?? Guid.Empty,
+            BaseFieldId = request.BaseFieldId,
+            IsRequired = request.IsRequired,
+            RequiredFieldId = request.RequiredFieldId,
+            RequiredFieldValue = request.RequiredFieldValue
+        };
 
+        return await _crffieldRepository.AddAsync(crfField);
+    }
+    
+
+    public async Task<IEnumerable<CrfField>> GetFieldsByFileIdAsync(Guid fileId)
+    {
+        return await _crffieldRepository.GetFieldsByFileIdAsync(fileId);
+    }
     public async Task<CrfField> GetCrfFieldByIdAsync(Guid id)
     {
         return await _crffieldRepository.GetByIdAsync(id);

@@ -54,6 +54,10 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IDropDownOptionRepository,DropDownOptionRepository>();
+builder.Services.AddScoped<IBaseFieldRepository,BaseFieldRepository>();
+builder.Services.AddScoped<IBaseFieldService, BaseFieldService>();
 builder.Services.AddScoped<AuthHelper>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();

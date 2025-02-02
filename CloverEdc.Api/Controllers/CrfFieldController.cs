@@ -15,6 +15,21 @@ public class CrfFieldController : ControllerBase
         _crffieldService = crffieldService;
     }
 
+    
+    [HttpPost("addFieldToFile")]
+    public async Task<IActionResult> AddFieldToFile([FromBody] CrfFieldDto request)
+    {
+        var crfField = await _crffieldService.AddFieldToFileAsync(request);
+        return Ok(crfField);
+    }
+
+    [HttpGet("file/{fileId}")]
+    public async Task<IActionResult> GetFieldsByFileId(Guid fileId)
+    {
+        var fields = await _crffieldService.GetFieldsByFileIdAsync(fileId);
+        return Ok(fields);
+    }
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCrfFieldById(Guid id)
     {

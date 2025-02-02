@@ -14,8 +14,8 @@ public class CrfValue : EntityBase
     public string Value { get; set; }
     
     public Guid? DropDownValueId { get; set; }
-    public DropDownOption DropDownValue { get; set; }
-    public string Status { get; set; }
+    public DropDownOption? DropDownValue { get; set; }
+    public string? Status { get; set; }
     public bool IsModified { get; set; }
 
     [JsonIgnore]

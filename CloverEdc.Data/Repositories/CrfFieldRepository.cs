@@ -14,7 +14,27 @@ public class CrfFieldRepository : BaseRepository<CrfField>, ICrfFieldRepository
     {
         _context = context;
     }
+    public async Task<CrfField> AddAsync(CrfField crfField)
+    {
+        await _context.CrfFields.AddAsync(crfField);
+        await _context.SaveChangesAsync();
+        return crfField;
+    }
 
+    public async Task<IEnumerable<CrfField>> GetFieldsByFileIdAsync(Guid fileId)
+    {
+        // i want also to include the dropdown options and type from the base field
+        return await _context.CrfFields
+            .Include(f => f.BaseField).ThenInclude(x=>x.Type) // Include base field details
+            .Include(f => f.BaseField).ThenInclude(x=>x.DropDownOptions) // Include dropdown options
+            .Where(f => f.CrfFileId == fileId)
+            .ToListAsync();
+        
+        // return await _context.CrfFields
+            // .Include(f => f.BaseField).ThenInclude(x=>x.Type) // Include base field details
+            // .Where(f => f.CrfFileId == fileId)
+            // .ToListAsync();
+    }
     public async Task<CrfField> GetByIdAsync(Guid id)
     {
         return await _context.CrfFields.FindAsync(id);
@@ -34,7 +54,7 @@ public class CrfFieldRepository : BaseRepository<CrfField>, ICrfFieldRepository
             ValidationRules = crffield.ValidationRules,
             IsRequired = crffield.IsRequired,
             RequiredFieldId = crffield.RequiredFieldId,
-            CrfFileId = crffield.CrfFileId
+            CrfFileId = crffield.CrfFileId?? Guid.Empty
         };
         _context.CrfFields.Add(newCrfField);
         await _context.SaveChangesAsync();
