@@ -17,8 +17,19 @@ public class AdverseEventController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAdverseEventById(Guid id)
     {
-        var result = await _adverseeventService.GetAdverseEventByIdAsync(id);
-        return Ok(result);
+        try
+        {
+
+            var result = await _adverseeventService.GetAdverseEventByIdAsync(id);
+            return Ok(new Response<AdverseEvent>(200, "AdverseEvent retrieved successfully", result));
+
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500,new Response<string>(500, "Error : "+e.Message));
+
+        }
+        
     }
  [HttpGet]
     public async Task<IActionResult> GetAllAdverseEvents([FromQuery] Filter filter)

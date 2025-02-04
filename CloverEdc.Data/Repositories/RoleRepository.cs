@@ -47,9 +47,12 @@ public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
         var role = await GetByIdAsync(id);
         if (role == null) return false;
-
-        _context.Roles.Remove(role);
+            
+        role.IsDeleted = true;
+        role.DateDeleted = DateTime.Now;
+        _context.Roles.Update(role);
         await _context.SaveChangesAsync();
+        //_context.Roles.Remove(role);
         return true;
     }
     public IQueryable<Role> SearchRoles(string keyword)
@@ -59,7 +62,7 @@ public class RoleRepository : BaseRepository<Role>, IRoleRepository
 
     public async Task<(IEnumerable<Role>, int)> GetPagedRolesAsync(Filter filter)
     {
-        var query = _context.Roles.AsQueryable();
+        var query = _context.Roles.Where(x=>!x.IsDeleted).AsQueryable();
         var keyword = filter.keyword;
         if (!string.IsNullOrEmpty(keyword))
         {    

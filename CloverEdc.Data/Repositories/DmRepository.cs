@@ -22,6 +22,7 @@ public class DmRepository : BaseRepository<Dm>, IDmRepository
 
     public async Task<IEnumerable<Dm>> GetAllAsync()
     {
+        return GetAll().AsEnumerable();
         return await _context.Dms.ToListAsync();
     }
 
