@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using CloverEdc.Data.Context;
+using CloverEdc.Data.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IDropDownOptionRepository,DropDownOptionRepository>()
 builder.Services.AddScoped<IBaseFieldRepository,BaseFieldRepository>();
 builder.Services.AddScoped<IBaseFieldService, BaseFieldService>();
 builder.Services.AddScoped<AuthHelper>();
+builder.Services.AddScoped<ContextHelpers>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ICrcRepository, CrcRepository>();

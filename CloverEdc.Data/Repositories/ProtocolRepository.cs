@@ -3,16 +3,19 @@ using CloverEdc.Core.Interfaces;
 using CloverEdc.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using CloverEdc.Data.Context;
+using CloverEdc.Data.Helpers;
 
 namespace CloverEdc.Data.Repositories;
 
 public class ProtocolRepository : BaseRepository<Protocol>, IProtocolRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly ContextHelpers _helper;
 
-    public ProtocolRepository(ApplicationDbContext context) : base(context)
+    public ProtocolRepository(ApplicationDbContext context, ContextHelpers helper) : base(context)
     {
         _context = context;
+        _helper = helper;
     }
 
     public async Task<Protocol> GetByIdAsync(Guid id)
@@ -22,7 +25,7 @@ public class ProtocolRepository : BaseRepository<Protocol>, IProtocolRepository
 
     public async Task<(IEnumerable<Protocol>, int)> GetPagedProtocolsAsync(Filter filter)
     {
-        var query = _context.Protocols.AsQueryable();
+        var query = _context.Protocols.Where(p => p.IsDeleted == false).AsQueryable();
         var keyword = filter.keyword;
         if (!string.IsNullOrEmpty(keyword))
         {    
@@ -68,8 +71,9 @@ public class ProtocolRepository : BaseRepository<Protocol>, IProtocolRepository
     {
         var protocol = await GetByIdAsync(id);
         if (protocol == null) return false;
-
-        _context.Protocols.Remove(protocol);
+        
+        _helper.SoftDeleteEntity(protocol);
+        _context.Protocols.Update(protocol);
         await _context.SaveChangesAsync();
         return true;
     }

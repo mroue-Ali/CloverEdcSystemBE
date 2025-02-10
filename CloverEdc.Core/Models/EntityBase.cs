@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CloverEdc.Core.Models;
     public class EntityBase
@@ -13,6 +14,7 @@ namespace CloverEdc.Core.Models;
         public DateTimeOffset? DateDeleted { get; set; }
 
         protected EntityBase() => Id = Guid.NewGuid();
+        
         
     }
     
